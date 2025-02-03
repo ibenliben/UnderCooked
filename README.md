@@ -1,7 +1,8 @@
 # Bidragsytere 
 Prosjektet er laget av: 
+
     Oda Hauge Kårstad á odahka
-    og
+
     Iben Foldnes Reiremo á ibenliben 
 
 # Om prosjektet
