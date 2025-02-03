@@ -8,7 +8,7 @@ YELLOW = (200, 200 , 0)
 
 # Definerer størrelsen på pygame-vinduet:
 # MERK: Samme størrelse som bg image
-WIDTH = 1024
+WIDTH = 1264
 HEIGHT = 704
 SIZE = (WIDTH, HEIGHT)
 

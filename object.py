@@ -1,5 +1,7 @@
+import pygame as pg
+#from constants import *
 from bilder import *
-from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT)
+from pygame.locals import (K_w, K_s, K_d, K_a)
 
 class Object:
     def __init__(self, x, y, img):
@@ -26,20 +28,20 @@ class Player(Object):
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
         # TODO: Flytt spilleren ut i fra hvilke taster som er trykket
-        if keys_pressed[K_UP]:
+        if keys_pressed[K_w]:
             self.y -= self.dy
             #self.image = 
-        if keys_pressed[K_DOWN]:
+        if keys_pressed[K_s]:
             self.y += self.dy
             #self.image = 
-        if keys_pressed[K_RIGHT]:
+        if keys_pressed[K_d]:
             self.x += self.dx
             #self.image = 
-        if keys_pressed[K_LEFT]:
+        if keys_pressed[K_a]:
             self.x -= self.dx
             #self.image =   
 
-class Mat(Object):
+class Food(Object):
     def __init__(self, x, y, img):
         super().__init__(x, y, img)
 
