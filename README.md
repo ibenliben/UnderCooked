@@ -1,9 +1,9 @@
 # Bidragsytere 
 Prosjektet er laget av: 
 
-    Oda Hauge Kårstad á odahka
+Oda Hauge Kårstad á odahka
 
-    Iben Foldnes Reiremo á ibenliben 
+Iben Foldnes Reiremo á ibenliben 
 
 # Om prosjektet
 Velkommen til UnderCooked – en forenklet pygame versjon av det populære spillet Overcooked! Her kan spillere samarbeide for å lage mat, holde styr på ordrer og levere ferdige måltider innen tidsfristen.
