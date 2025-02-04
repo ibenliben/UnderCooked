@@ -1,7 +1,7 @@
 import pygame as pg
 #from constants import *
 from bilder import *
-from pygame.locals import (K_w, K_s, K_d, K_a)
+from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT)
 
 class Object:
     def __init__(self, x, y, img):
@@ -23,21 +23,20 @@ class Player(Object):
     def __init__(self, x, y, img):
         super().__init__(x, y, img) 
 
-    def move(self):
+    def move(self, kd, ku, kr, kl):
         self.dx = 3
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
-        # TODO: Flytt spilleren ut i fra hvilke taster som er trykket
-        if keys_pressed[K_w]:
-            self.y -= self.dy
-            #self.image = 
-        if keys_pressed[K_s]:
+        if keys_pressed[ku]:
             self.y += self.dy
             #self.image = 
-        if keys_pressed[K_d]:
+        if keys_pressed[kd]:
+            self.y -= self.dy
+            #self.image = 
+        if keys_pressed[kr]:
             self.x += self.dx
             #self.image = 
-        if keys_pressed[K_a]:
+        if keys_pressed[kl]:
             self.x -= self.dx
             #self.image =   
 

@@ -1,5 +1,6 @@
 import pygame as pg
 from constants import *
+from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT)
 
 pg.init()
 clock = pg.time.Clock()
@@ -30,8 +31,8 @@ while running:
      # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
-    player1.move()
-    player2.move()
+    player1.move(K_w, K_s, K_d, K_a)
+    player2.move(K_UP, K_DOWN, K_RIGHT, K_LEFT)
 
     # Oppdater skjermen for å vise endringene:
     pg.display.update()
