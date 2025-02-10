@@ -1,51 +1,63 @@
 import pygame as pg
 from constants import *
-screen = pg.display.set_mode(SIZE)
+
 from bilder import *
-from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT)
+
 
 class Object:
     def __init__(self, x, y, image):
         self.x = x
         self.y = y
-        self.image = image  # lage liste med bilder? lettere å bytte bilde når player beveger seg
+        self.image = image 
         self.dx = 0
         self.dy = 0
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
 
     def draw(self, screen):
-        screen.blit(self.image,(self.x, self.y))
+        screen.blit(self.image, self.rect.topleft)
 
-    def move(self):
+    def update(self):
         self.x += self.dx
         self.y += self.dy
+        self.rect.topleft = (self.x, self.y)
+
 
 
 class Food(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-    def move(self):
-        # TODO: finne retning basert på hvilken side av kartet player er
-        pass
 
 
 class Chicken_wing(Food, pg.sprite.Sprite):
     def __init__(self, x, y, image):
         pg.sprite.Sprite.__init__(self)
         super().__init__(x, y, image)
-        self.rect = self.image.get_rect()
-        # self.rect.center = (x, y)
-
+        self.dx = 5
+        self.dy = -3
+        self.y_start = y
+       
     def update(self):
-        self.rect.move_ip(5,0)
-        # TODO: self.kill() etter noen sekunder
+        self.dy += 0.1 # Gravitasjon
+        if self.dy > 0 and abs(self.y - self.y_start) < 0.1:
+            self.dx = 0
+            self.dy = 0
+            self.y = self.y_start
+
+        super().update()
+
+        # TODO: 
+        # - player1 kaster til venstre og player 2 til høyre
+        # - legge på tyngdekraft...
+        # - self.kill() etter noen sekunder/ plukke opp
     
 
 class Player(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image) 
 
-    def move(self, kd, ku, kr, kl):
+    def update(self, kd, ku, kr, kl):
         self.dx = 3
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
@@ -61,16 +73,13 @@ class Player(Object):
         if keys_pressed[kl]:
             self.x -= self.dx
             #self.image =   
-    
-    def throw(self, k_throw):
-        keys_pressed = pg.key.get_pressed()
-        if keys_pressed[k_throw]:
-            wing = Chicken_wing(self.x, self.y, chicken_wing)
-            wings = pg.sprite.Group()
-            wings.add(wing)
+        self.rect.topleft = (self.x, self.y)
 
-            wings.update()
-            wings.draw(screen)
-            print(wings)
+    
+    def throw(self, keys_pressed, k_throw, wings):
+        if k_throw in keys_pressed:
+            center = self.rect.center
+            wing = Chicken_wing(center[0]-10, center[1]-10, chicken_wing)
+            wings.add(wing)
 
 

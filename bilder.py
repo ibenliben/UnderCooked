@@ -11,7 +11,7 @@ PLAYER_HEIGHT = 70
 bg_img = pg.transform.scale(bg_img, SIZE)
 player1_d = pg.transform.scale(player1_d, (PLAYER_HEIGHT, 1200/(975/PLAYER_HEIGHT)))
 player2_d = pg.transform.scale(player2_d, (PLAYER_HEIGHT, 1200/(975/PLAYER_HEIGHT)))
-chicken_wing = pg.transform.scale(chicken_wing,(40, 20))
+chicken_wing = pg.transform.scale(chicken_wing,(60, 40))
 
 
 #player1_r = pg.transform.flip(player1_l, True, False)
