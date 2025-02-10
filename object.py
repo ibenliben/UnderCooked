@@ -6,8 +6,6 @@ from bilder import *
 
 class Object:
     def __init__(self, x, y, image):
-        self.x = x
-        self.y = y
         self.image = image 
         self.dx = 0
         self.dy = 0
@@ -18,9 +16,9 @@ class Object:
         screen.blit(self.image, self.rect.topleft)
 
     def update(self):
-        self.x += self.dx
-        self.y += self.dy
-        self.rect.topleft = (self.x, self.y)
+        self.rect.x += self.dx
+        self.rect.y += self.dy
+        #self.rect.topleft = (self.x, self.y)
 
 
 
@@ -36,20 +34,19 @@ class Chicken_wing(Food, pg.sprite.Sprite):
         super().__init__(x, y, image)
         self.dx = 5
         self.dy = -3
-        self.y_start = y
+        self.y_start = self.rect.y
        
     def update(self):
         self.dy += 0.1 # Gravitasjon
-        if self.dy > 0 and abs(self.y - self.y_start) < 0.1:
+        if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
             self.dx = 0
             self.dy = 0
-            self.y = self.y_start
+            self.rect.y = self.y_start
 
         super().update()
 
         # TODO: 
         # - player1 kaster til venstre og player 2 til høyre
-        # - legge på tyngdekraft...
         # - self.kill() etter noen sekunder/ plukke opp
     
 
@@ -62,18 +59,18 @@ class Player(Object):
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
         if keys_pressed[ku]:
-            self.y += self.dy
+            self.rect.y += self.dy
             #self.image = 
         if keys_pressed[kd]:
-            self.y -= self.dy
+            self.rect.y -= self.dy
             #self.image = 
         if keys_pressed[kr]:
-            self.x += self.dx
+            self.rect.x += self.dx
             #self.image = 
         if keys_pressed[kl]:
-            self.x -= self.dx
+            self.rect.x -= self.dx
             #self.image =   
-        self.rect.topleft = (self.x, self.y)
+        self.rect.topleft = (self.rect.x, self.rect.y)
 
     
     def throw(self, keys_pressed, k_throw, wings):
