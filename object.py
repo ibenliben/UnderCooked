@@ -26,82 +26,6 @@ class Player(Object):
         super().__init__(x, y, image) 
         self.held_food = None   # spilleren holder ingen mat ved start
 
-    def update(self, kd, ku, kr, kl):
-        self.dx = 3
-        self.dy = 3
-        keys_pressed = pg.key.get_pressed()
-        if keys_pressed[ku]:
-            self.rect.y += self.dy
-            #self.image = 
-        if keys_pressed[kd]:
-            self.rect.y -= self.dy
-            #self.image = 
-        if keys_pressed[kr]:
-            self.rect.x += self.dx
-            #self.image = 
-        if keys_pressed[kl]:
-            self.rect.x -= self.dx
-            #self.image =   
-        self.rect.topleft = (self.rect.x, self.rect.y)
-
-    
-    def throw(self, keys_pressed, k_throw, tomatoes):
-        if k_throw in keys_pressed and self.held_food:      # kan bare kaste mat hvis spilleren har mat
-            center = self.rect.center
-            tomato = Tomato(center[0]-10, center[1]-10, tomato_img)
-            tomatoes.add(tomato)
-            self.held_food = None       # spilleren mister maten
-
-        # TODO: all mat må kunne kastes - kan bare kaste maten spilleren holder. 
-    
-    def pick_up(self, food):
-        if self.held_food is None:
-            self.held_food = food
-
-
-class Food(Object):
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
-
-
-class FoodStation(Object):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-
-    def give_food(self, player, Food_class, food_img):
-        if player.held_food is None:
-            player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) # spilleren får en tomat
-
-    # TODO: skille mellom give_tomato, give_salad osv.
-
-class Tomato(Food, pg.sprite.Sprite):
-    def __init__(self, x, y, image):
-        pg.sprite.Sprite.__init__(self)
-        super().__init__(x, y, image)
-        self.dx = 5
-        self.dy = -3
-        self.y_start = self.rect.y
-       
-    def update(self):
-        self.dy += 0.1 # Gravitasjon
-        if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
-            self.dx = 0
-            self.dy = 0
-            self.rect.y = self.y_start
-
-        super().update()
-
-        # TODO: 
-        # - player1 kaster til venstre og player 2 til høyre
-        # - må kunne plukkes opp
-        # - må kunne kutte opp tomat -> tomatoslice
-        # - må kunne steke kjøtt
-    
-
-class Player(Object):
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image) 
-
     def update(self, kd, ku, kr, kl, other_player):
         self.dx = 3
         self.dy = 3
@@ -138,11 +62,56 @@ class Player(Object):
         #   if new_rect.colliderect(wall):
         #       return True
         return False
-    
+
     def throw(self, keys_pressed, k_throw, tomatoes):
-        if k_throw in keys_pressed:
+        if k_throw in keys_pressed and self.held_food:      # kan bare kaste mat hvis spilleren har mat
             center = self.rect.center
             tomato = Tomato(center[0]-10, center[1]-10, tomato_img)
             tomatoes.add(tomato)
+            self.held_food = None       # spilleren mister maten
+
+        # TODO: all mat må kunne kastes - kan bare kaste maten spilleren holder. 
+    
+    def pick_up(self, food):
+        if self.held_food is None:
+            self.held_food = food
 
 
+class Food(Object):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+
+class FoodStation(Object):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+    def give_food(self, player, Food_class, food_img):
+        if player.held_food is None:
+            player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) # spilleren får en tomat
+
+    # TODO: skille mellom give_tomato, give_salad osv.
+
+class Tomato(Food, pg.sprite.Sprite):
+    def __init__(self, x, y, image):
+        pg.sprite.Sprite.__init__(self)
+        super().__init__(x, y, image)
+        self.dx = 5
+        self.dy = -3
+        self.y_start = self.rect.y
+       
+    def update(self):
+        self.dy += 0.1 # Gravitasjon
+        if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
+            self.dx = 0
+            self.dy = 0
+            self.rect.y = self.y_start
+
+        super().update()
+
+        # TODO: 
+        # - player1 kaster til venstre og player 2 til høyre
+        # - må kunne plukkes opp
+        # - må kunne kutte opp tomat -> tomatoslice
+        # - må kunne steke kjøtt
+    

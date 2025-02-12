@@ -11,7 +11,7 @@ from bilder import *
 import score_text
 
 tomatoes = pg.sprite.Group()
-tomato_station = FoodStation(300, 300)
+tomato_station = FoodStation(300, 300, tomato_img)
 
 player1 = Player(200, 100, player1_d)
 player2 = Player(400, 100, player2_d)
