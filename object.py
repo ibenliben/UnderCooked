@@ -24,8 +24,9 @@ class Player(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image) 
         self.held_food = None   # spilleren holder ingen mat ved start
+        self.action = False
 
-    def update(self, kd, ku, kr, kl, other_player):
+    def update(self, kd, ku, kr, kl, pickup, other_player):
         self.dx = 3
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
@@ -50,7 +51,12 @@ class Player(Object):
             new_rect.x -= self.dx
             if not self.check_collision(new_rect, other_player):
                 self.rect.x -= self.dx
-                 
+
+        if keys_pressed[pickup]:
+            self.action = True
+        else: 
+            self.action = False
+        
         self.rect.topleft = (self.rect.x, self.rect.y)
 
         if self.held_food:
