@@ -74,7 +74,7 @@ class Player(Object):
         # kan bare kaste mat hvis spilleren har mat
         if k_throw in keys_pressed and self.held_food:      
             center = self.rect.center
-            tomato = Tomato(center[0]-10, center[1]-10, tomato_img)
+            tomato = Food(center[0]-10, center[1]-10, tomato_img)
             tomatoes.add(tomato)
             self.held_food = None       # spilleren mister maten
 
@@ -85,9 +85,6 @@ class Player(Object):
             self.held_food = food
 
 
-class Food(Object):
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
 
 
 class FoodStation(Object):
@@ -100,7 +97,7 @@ class FoodStation(Object):
 
     # TODO: skille mellom give_tomato, give_salad osv.
 
-class Tomato(Food, pg.sprite.Sprite):
+class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
         pg.sprite.Sprite.__init__(self)
         super().__init__(x, y, image)
@@ -127,31 +124,7 @@ class Tomato(Food, pg.sprite.Sprite):
                 self.kill() #fjerner tomaten fra alle sprites
         super().update()
 
-class Bread(Food, pg.sprite.Sprite):
-    def __init__(self, x, y, image):
-        pg.sprite.Sprite.__init__(self)
-        super().__init__(x, y, image)
-        self.dx = 5
-        self.dy = -3
-        self.y_start = self.rect.y
-        self.cooldown_timer = 0
-        self.cooldown_duration = 4000  # Duration in milliseconds
 
-    def update(self):
-        self.dy += 0.1
-
-        # Stop when it hits the ground
-        if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
-            self.dx = 0
-            self.dy = 0
-            self.rect.y = self.y_start
-
-        # Create a cooldown timer
-        if self.cooldown_timer == 0:
-            self.cooldown_timer = pg.time.get_ticks()
-        elif pg.time.get_ticks() - self.cooldown_timer >= self.cooldown_duration:
-            self.kill()  # Remove the bread from all sprites
-        super().update()
         # TODO: 
         # - må kunne plukkes opp etter kast
         # - må kunne kutte opp tomat -> tomatoslice

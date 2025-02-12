@@ -6,7 +6,7 @@ pg.init()
 clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 
-from object import Player, Tomato, FoodStation, Bread
+from object import Player, Food, FoodStation
 from bilder import *
 import score_text
 
@@ -51,14 +51,14 @@ while running:
 
     # hvis spillere prøver å plukke opp tomat
     if player1.rect.colliderect(tomato_station.rect) and player1.action ==True:
-        tomato_station.give_food(player1, Tomato, tomato_img)
+        tomato_station.give_food(player1, Food, tomato_img)
     if player2.rect.colliderect(tomato_station.rect) and player2.action ==True:
-        tomato_station.give_food(player2, Tomato, tomato_img)
+        tomato_station.give_food(player2, Food, tomato_img)
 
     if player1.rect.colliderect(bread_station.rect) and player1.action ==True:
-        bread_station.give_food(player1, Bread, burgerbread_img)
+        bread_station.give_food(player1, Food, burgerbread_img)
     if player2.rect.colliderect(bread_station.rect) and player2.action ==True:
-        bread_station.give_food(player2, Bread, burgerbread_img)
+        bread_station.give_food(player2, Food, burgerbread_img)
 
     player1.throw(keys_pressed, K_LSHIFT, tomatoes)
     player2.throw(keys_pressed, K_RSHIFT, tomatoes)
