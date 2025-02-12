@@ -27,13 +27,8 @@ class Food(Object):
 
 
 class FoodStation(Object):
-<<<<<<< Updated upstream
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
-=======
-    def __init__(self, x, y):
-        super().__init__(x, y)
->>>>>>> Stashed changes
 
     def give_food(self, player, Food_class, food_img):
         if player.held_food is None:
@@ -63,11 +58,4 @@ class Tomato(Food, pg.sprite.Sprite):
         # - må kunne plukkes opp
         # - må kunne kutte opp tomat -> tomatoslice
         # - må kunne steke kjøtt
-<<<<<<< Updated upstream
-    
-=======
-    
 
-
-
->>>>>>> Stashed changes
