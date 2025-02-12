@@ -5,9 +5,9 @@ from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_
 pg.init()
 clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
-wings = pg.sprite.Group()
+tomatoes = pg.sprite.Group()
 
-from object import Object, Player, Food, Chicken_wing
+from object import Object, Player, Food
 from bilder import *
 import score_text
 
@@ -42,11 +42,11 @@ while running:
     player1.update(K_w, K_s, K_d, K_a)
     player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT)
 
-    player1.throw(keys_pressed, K_LSHIFT, wings)
-    player2.throw(keys_pressed, K_RSHIFT, wings)
+    player1.throw(keys_pressed, K_LSHIFT, tomatoes)
+    player2.throw(keys_pressed, K_RSHIFT, tomatoes)
 
-    wings.update()
-    wings.draw(screen)
+    tomatoes.update()
+    tomatoes.draw(screen)
     
 
     # Oppdater skjermen for å vise endringene:
