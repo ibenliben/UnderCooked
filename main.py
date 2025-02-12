@@ -11,11 +11,8 @@ from bilder import *
 import score_text
 
 tomatoes = pg.sprite.Group()
-<<<<<<< Updated upstream
+
 tomato_station = FoodStation(300, 300, tomato_img)
-=======
-tomato_station = FoodStation(300, 300)
->>>>>>> Stashed changes
 
 player1 = Player(200, 100, player1_d)
 player2 = Player(400, 100, player2_d)
@@ -47,6 +44,12 @@ while running:
     
     player1.update(K_w, K_s, K_d, K_a, player2)
     player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT, player1)
+
+    # hvis spillere prøver å plukke opp tomat
+    if player1.rect.colliderect(tomato_station.rect):
+        tomato_station.give_food(player1, Tomato, tomato_img)
+    if player2.rect.colliderect(tomato_station.rect):
+        tomato_station.give_food(player2, Tomato, tomato_img)
 
     # hvis spillere prøver å plukke opp tomat
     if player1.rect.colliderect(tomato_station.rect):
