@@ -26,6 +26,7 @@ class Player(Object):
         super().__init__(x, y, image) 
         self.held_food = None   # spilleren holder ingen mat ved start
 
+<<<<<<< Updated upstream
     def update(self, kd, ku, kr, kl, other_player):
         self.dx = 3
         self.dy = 3
@@ -63,6 +64,27 @@ class Player(Object):
         #       return True
         return False
 
+=======
+    def update(self, kd, ku, kr, kl):
+        self.dx = 3
+        self.dy = 3
+        keys_pressed = pg.key.get_pressed()
+        if keys_pressed[ku]:
+            self.rect.y += self.dy
+            #self.image = 
+        if keys_pressed[kd]:
+            self.rect.y -= self.dy
+            #self.image = 
+        if keys_pressed[kr]:
+            self.rect.x += self.dx
+            #self.image = 
+        if keys_pressed[kl]:
+            self.rect.x -= self.dx
+            #self.image =   
+        self.rect.topleft = (self.rect.x, self.rect.y)
+
+    
+>>>>>>> Stashed changes
     def throw(self, keys_pressed, k_throw, tomatoes):
         if k_throw in keys_pressed and self.held_food:      # kan bare kaste mat hvis spilleren har mat
             center = self.rect.center
@@ -83,8 +105,13 @@ class Food(Object):
 
 
 class FoodStation(Object):
+<<<<<<< Updated upstream
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
+=======
+    def __init__(self, x, y):
+        super().__init__(x, y)
+>>>>>>> Stashed changes
 
     def give_food(self, player, Food_class, food_img):
         if player.held_food is None:
@@ -114,4 +141,11 @@ class Tomato(Food, pg.sprite.Sprite):
         # - må kunne plukkes opp
         # - må kunne kutte opp tomat -> tomatoslice
         # - må kunne steke kjøtt
+<<<<<<< Updated upstream
     
+=======
+    
+
+
+
+>>>>>>> Stashed changes
