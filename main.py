@@ -50,6 +50,12 @@ while running:
     if player2.rect.colliderect(tomato_station.rect):
         tomato_station.give_food(player2, Tomato, tomato_img)
 
+    # hvis spillere prøver å plukke opp tomat
+    if player1.rect.colliderect(tomato_station.rect):
+        tomato_station.give_food(player1, Tomato, tomato_img)
+    if player2.rect.colliderect(tomato_station.rect):
+        tomato_station.give_food(player2, Tomato, tomato_img)
+
     player1.throw(keys_pressed, K_LSHIFT, tomatoes)
     player2.throw(keys_pressed, K_RSHIFT, tomatoes)
 
