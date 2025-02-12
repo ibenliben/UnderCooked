@@ -21,7 +21,6 @@ class Object:
         #self.rect.topleft = (self.x, self.y)
 
 
-
 class Food(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
