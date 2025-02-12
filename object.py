@@ -21,11 +21,58 @@ class Object:
         #self.rect.topleft = (self.x, self.y)
 
 
+class Player(Object):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image) 
+        self.held_food = None   # spilleren holder ingen mat ved start
+
+    def update(self, kd, ku, kr, kl):
+        self.dx = 3
+        self.dy = 3
+        keys_pressed = pg.key.get_pressed()
+        if keys_pressed[ku]:
+            self.rect.y += self.dy
+            #self.image = 
+        if keys_pressed[kd]:
+            self.rect.y -= self.dy
+            #self.image = 
+        if keys_pressed[kr]:
+            self.rect.x += self.dx
+            #self.image = 
+        if keys_pressed[kl]:
+            self.rect.x -= self.dx
+            #self.image =   
+        self.rect.topleft = (self.rect.x, self.rect.y)
+
+    
+    def throw(self, keys_pressed, k_throw, tomatoes):
+        if k_throw in keys_pressed and self.held_food:      # kan bare kaste mat hvis spilleren har mat
+            center = self.rect.center
+            tomato = Tomato(center[0]-10, center[1]-10, tomato_img)
+            tomatoes.add(tomato)
+            self.held_food = None       # spilleren mister maten
+
+        # TODO: all mat må kunne kastes - kan bare kaste maten spilleren holder. 
+    
+    def pick_up(self, food):
+        if self.held_food is None:
+            self.held_food = food
+
+
 class Food(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
 
+class FoodStation(Object):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+
+    def give_food(self, player, Food_class, food_img):
+        if player.held_food is None:
+            player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) # spilleren får en tomat
+
+    # TODO: skille mellom give_tomato, give_salad osv.
 
 class Tomato(Food, pg.sprite.Sprite):
     def __init__(self, x, y, image):
