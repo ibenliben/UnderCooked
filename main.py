@@ -6,12 +6,14 @@ pg.init()
 clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 
-from object import Player, Tomato, FoodStation
+from object import Player, Tomato, FoodStation, Bread
 from bilder import *
 import score_text
 
 tomatoes = pg.sprite.Group()
 tomato_station = FoodStation(715, 210, square_img)
+tomatoes = pg.sprite.Group()
+bread_station = FoodStation(460, 480, square_img)
 
 
 player1 = Player(500, 100, player1_d)
@@ -38,6 +40,7 @@ while running:
     # TODO: Skriv inn "score"/penger og tid
 
     tomato_station.draw(screen)
+    bread_station.draw(screen)
     # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
@@ -51,6 +54,11 @@ while running:
         tomato_station.give_food(player1, Tomato, tomato_img)
     if player2.rect.colliderect(tomato_station.rect) and player2.action ==True:
         tomato_station.give_food(player2, Tomato, tomato_img)
+
+    if player1.rect.colliderect(bread_station.rect) and player1.action ==True:
+        bread_station.give_food(player1, Bread, burgerbread_img)
+    if player2.rect.colliderect(bread_station.rect) and player2.action ==True:
+        bread_station.give_food(player2, Bread, burgerbread_img)
 
     player1.throw(keys_pressed, K_LSHIFT, tomatoes)
     player2.throw(keys_pressed, K_RSHIFT, tomatoes)
