@@ -45,7 +45,9 @@ class Tomato(Food, pg.sprite.Sprite):
         self.y_start = self.rect.y
        
     def update(self):
-        self.dy += 0.1 # Gravitasjon
+        self.dy += 0.1
+
+        # stopper når den treffer bakken
         if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
             self.dx = 0
             self.dy = 0
@@ -54,8 +56,7 @@ class Tomato(Food, pg.sprite.Sprite):
         super().update()
 
         # TODO: 
-        # - player1 kaster til venstre og player 2 til høyre
-        # - må kunne plukkes opp
+        # - må kunne plukkes opp etter kast
         # - må kunne kutte opp tomat -> tomatoslice
         # - må kunne steke kjøtt
 
@@ -92,6 +93,9 @@ class Player(Object):
                  
         self.rect.topleft = (self.rect.x, self.rect.y)
 
+        if self.held_food:
+            self.held_food.rect.center = self.rect.center   # tomaten føger etter spiller
+
     def check_collision(self, new_rect, other_player):
         if new_rect.colliderect(other_player.rect):
             return True
@@ -102,7 +106,8 @@ class Player(Object):
         return False
 
     def throw(self, keys_pressed, k_throw, tomatoes):
-        if k_throw in keys_pressed and self.held_food:      # kan bare kaste mat hvis spilleren har mat
+        # kan bare kaste mat hvis spilleren har mat
+        if k_throw in keys_pressed and self.held_food:      
             center = self.rect.center
             tomato = Tomato(center[0]-10, center[1]-10, tomato_img)
             tomatoes.add(tomato)
