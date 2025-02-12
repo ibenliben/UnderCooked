@@ -108,6 +108,9 @@ class Tomato(Food, pg.sprite.Sprite):
         self.dx = 5
         self.dy = -3
         self.y_start = self.rect.y
+        self.cooldown_timer = 0
+        self.cooldown_duration = 4000 
+        
        
     def update(self):
         self.dy += 0.1
@@ -118,6 +121,11 @@ class Tomato(Food, pg.sprite.Sprite):
             self.dy = 0
             self.rect.y = self.y_start
 
+        #lager en cooldown timer
+        if self.cooldown_timer == 0:
+                self.cooldown_timer = pg.time.get_ticks()
+        elif pg.time.get_ticks() - self.cooldown_timer >= self.cooldown_duration:
+                self.kill() #fjerner tomaten fra alle sprites
         super().update()
 
         # TODO: 
