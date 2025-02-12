@@ -53,29 +53,46 @@ class Player(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image) 
 
-    def update(self, kd, ku, kr, kl):
+    def update(self, kd, ku, kr, kl, other_player):
         self.dx = 3
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
+        new_rect = self.rect.copy()
+
         if keys_pressed[ku]:
-            self.rect.y += self.dy
-            #self.image = 
+            new_rect.y += self.dy
+            if not self.check_collision(new_rect, other_player):
+                self.rect.y += self.dy
+
         if keys_pressed[kd]:
-            self.rect.y -= self.dy
-            #self.image = 
+            new_rect.y -= self.dy
+            if not self.check_collision(new_rect, other_player):
+                self.rect.y -= self.dy
+
         if keys_pressed[kr]:
-            self.rect.x += self.dx
-            #self.image = 
+            new_rect.x += self.dx
+            if not self.check_collision(new_rect, other_player):
+                self.rect.x += self.dx
+
         if keys_pressed[kl]:
-            self.rect.x -= self.dx
-            #self.image =   
+            new_rect.x -= self.dx
+            if not self.check_collision(new_rect, other_player):
+                self.rect.x -= self.dx
+                 
         self.rect.topleft = (self.rect.x, self.rect.y)
 
+    def check_collision(self, new_rect, other_player):
+        if new_rect.colliderect(other_player.rect):
+            return True
+        #TODO: kollisjon med vegger
+        #for wall in walls:
+        #   if new_rect.colliderect(wall):
+        #       return True
+        return False
     
     def throw(self, keys_pressed, k_throw, wings):
         if k_throw in keys_pressed:
             center = self.rect.center
             wing = Chicken_wing(center[0]-10, center[1]-10, chicken_wing)
             wings.add(wing)
-
-
+        

@@ -8,6 +8,7 @@ screen = pg.display.set_mode(SIZE)
 wings = pg.sprite.Group()
 
 from object import Object, Player, Food, Chicken_wing
+
 from bilder import *
 import score_text
 
@@ -39,12 +40,13 @@ while running:
     player1.draw(screen)
     player2.draw(screen)
     
-    player1.update(K_w, K_s, K_d, K_a)
-    player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT)
+    player1.update(K_w, K_s, K_d, K_a, player2)
+    player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT, player1)
 
     player1.throw(keys_pressed, K_LSHIFT, wings)
     player2.throw(keys_pressed, K_RSHIFT, wings)
 
+   
     wings.update()
     wings.draw(screen)
     
