@@ -27,7 +27,7 @@ class Food(Object):
 
 
 
-class Chicken_wing(Food, pg.sprite.Sprite):
+class Tomato(Food, pg.sprite.Sprite):
     def __init__(self, x, y, image):
         pg.sprite.Sprite.__init__(self)
         super().__init__(x, y, image)
@@ -46,7 +46,9 @@ class Chicken_wing(Food, pg.sprite.Sprite):
 
         # TODO: 
         # - player1 kaster til venstre og player 2 til høyre
-        # - self.kill() etter noen sekunder/ plukke opp
+        # - må kunne plukkes opp
+        # - må kunne kutte opp tomat -> tomatoslice
+        # - må kunne steke kjøtt
     
 
 class Player(Object):
@@ -90,9 +92,10 @@ class Player(Object):
         #       return True
         return False
     
-    def throw(self, keys_pressed, k_throw, wings):
+    def throw(self, keys_pressed, k_throw, tomatoes):
         if k_throw in keys_pressed:
             center = self.rect.center
-            wing = Chicken_wing(center[0]-10, center[1]-10, chicken_wing)
-            wings.add(wing)
-        
+            tomato = Tomato(center[0]-10, center[1]-10, tomato_img)
+            tomatoes.add(tomato)
+
+
