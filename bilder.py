@@ -1,7 +1,7 @@
 import pygame as pg
 from constants import *
 
-bg_img = pg.image.load("assets/bg1.jpg").convert_alpha()
+bg_img = pg.image.load("assets/kart.png").convert_alpha()
 player1_d = pg.image.load("assets/player1.png").convert_alpha()
 player2_d = pg.image.load("assets/player2.png").convert_alpha()
 tomato_img = pg.image.load("assets/tomato.png").convert_alpha()
