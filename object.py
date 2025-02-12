@@ -47,6 +47,8 @@ class Tomato(Food, pg.sprite.Sprite):
         # TODO: 
         # - player1 kaster til venstre og player 2 til høyre
         # - må kunne plukkes opp
+        # - må kunne kutte opp tomat -> tomatoslice
+        # - må kunne steke kjøtt
     
 
 class Player(Object):
