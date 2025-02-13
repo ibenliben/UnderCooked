@@ -12,8 +12,12 @@ import score_text
 
 tomatoes = pg.sprite.Group()
 tomato_station = FoodStation(715, 210, square_img)
-tomatoes = pg.sprite.Group()
+bread = pg.sprite.Group()
 bread_station = FoodStation(460, 480, square_img)
+tomatoes = pg.sprite.Group()
+meat_station = FoodStation(800, 100, square_img)
+meat = pg.sprite.Group()
+
 
 
 player1 = Player(500, 100, player1_d)
@@ -41,6 +45,7 @@ while running:
 
     tomato_station.draw(screen)
     bread_station.draw(screen)
+    meat_station.draw(screen)
     # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
@@ -48,6 +53,8 @@ while running:
     
     player1.update(K_w, K_s, K_d, K_a, K_LCTRL, player2)
     player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RCTRL, player1)
+
+    #TODO: Komprimer funksjonen under
 
     # hvis spillere prøver å plukke opp tomat
     if player1.rect.colliderect(tomato_station.rect) and player1.action ==True:
@@ -59,6 +66,11 @@ while running:
         bread_station.give_food(player1, Food, burgerbread_img)
     if player2.rect.colliderect(bread_station.rect) and player2.action ==True:
         bread_station.give_food(player2, Food, burgerbread_img)
+
+    if player1.rect.colliderect(meat_station.rect) and player1.action ==True:
+        meat_station.give_food(player1, Food, beef_img)
+    if player2.rect.colliderect(meat_station.rect) and player2.action ==True:
+        meat_station.give_food(player2, Food, beef_img)
 
     player1.throw(keys_pressed, K_LSHIFT, tomatoes)
     player2.throw(keys_pressed, K_RSHIFT, tomatoes)
