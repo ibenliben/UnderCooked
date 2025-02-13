@@ -17,15 +17,19 @@ class Object:
     def update(self):
         self.rect.x += self.dx
         self.rect.y += self.dy
-        #self.rect.topleft = (self.x, self.y)
+        
 
 class Player(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image) 
         self.held_food = None   # spilleren holder ingen mat ved start
-        self.action = False
+        self.can_move = True  
+
 
     def update(self, kd, ku, kr, kl, pickup, other_player):
+        if not self.can_move:
+            return
+        
         self.dx = 3
         self.dy = 3
         keys_pressed = pg.key.get_pressed()
@@ -55,7 +59,8 @@ class Player(Object):
             self.action = True
         else: 
             self.action = False
-        
+
+
         self.rect.topleft = (self.rect.x, self.rect.y)
 
         if self.held_food:
@@ -84,18 +89,69 @@ class Player(Object):
         if self.held_food is None:
             self.held_food = food
 
+    def put_down(self):
+        self.held_food = None
 
+class ProgressBar:
+    def __init__(self, duration):
+        self.duration = duration
+        self.progress = 0
+        self.start_time = None
 
+    def start(self):
+        self.start_time = pg.time.get_ticks()
+        #print("ProgressBar startet :", self.start_time) -> brukt under debug
+
+    def update(self):
+        #print("progressjon:", self.progress) -> brukt for debug
+        if self.start_time is not None:
+            elapsed_time = (pg.time.get_ticks() - self.start_time) / 1000  
+            self.progress = min(elapsed_time / self.duration, 1) 
+
+    def draw(self, screen, x, y, width, height):
+        border_rect = pg.Rect(x - 2, y - 2, width + 4, height + 4)  # Litt større enn progress bar
+        pg.draw.rect(screen, (255, 255, 255), border_rect, 2)  
+        pg.draw.rect(screen, (255, 0, 0), (x, y, width, height)) # Rød bakgrunn
+        pg.draw.rect(screen, (0, 255, 0), (x, y, width * self.progress, height)) # grønnt progress etterhvert
+
+    def is_complete(self):
+        return self.progress >= 1
+    
+class ActionStation(Object):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+        self.in_use = False
+        self.progress_bar = ProgressBar(4)  
+
+    def use_station(self, player):
+        if player.held_food and player.action:
+            self.in_use = True
+            player.can_move = False
+            self.progress_bar.start()
+            player.put_down()
+
+    def update(self, player):
+        if self.in_use:
+            self.progress_bar.update()
+            if self.progress_bar.is_complete():
+                self.in_use = False
+                player.can_move = True
+                #TODO: spiller må få den kuttet versjonen av maten 
+                #player.pick_up(Food_class(player.rect.x, player.rect.y, food_img))
+
+    def draw(self, screen):
+        if self.in_use:
+            self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
 
 class FoodStation(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
     def give_food(self, player, Food_class, food_img):
-        if player.held_food is None:
-            player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) # spilleren får en tomat
+        if player.held_food is None and player.action == True:
+            player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) 
 
-    # TODO: skille mellom give_tomato, give_salad osv.
+
 
 class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
