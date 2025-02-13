@@ -57,8 +57,10 @@ class Player(Object):
 
         if keys_pressed[pickup]:
             self.action = True
+            #print("action true")
         else: 
             self.action = False
+            #print("action false")
 
 
         self.rect.topleft = (self.rect.x, self.rect.y)
@@ -87,7 +89,9 @@ class Player(Object):
     
     def pick_up(self, food):
         if self.held_food is None:
+            print(f"Picking up: {type(food)}")  # Debug-melding
             self.held_food = food
+
 
     def put_down(self):
         self.held_food = None
@@ -121,23 +125,45 @@ class ActionStation(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
         self.in_use = False
-        self.progress_bar = ProgressBar(4)  
+        self.progress_bar = ProgressBar(4) 
+        self.food_type = None #lagrer typen mat som blir kutta/stekt 
 
     def use_station(self, player):
-        if player.held_food and player.action:
+        if player.held_food and player.action and not self.in_use:  
+            print(f"Started processing: {type(player.held_food)}")  # Debug-melding
             self.in_use = True
             player.can_move = False
             self.progress_bar.start()
+            self.food_type = type(player.held_food)
             player.put_down()
-
+            
     def update(self, player):
-        if self.in_use:
-            self.progress_bar.update()
-            if self.progress_bar.is_complete():
-                self.in_use = False
-                player.can_move = True
+        if not self.in_use:  # Legger til en sjekk
+            return
+
+        self.progress_bar.update()
+        if self.progress_bar.is_complete():
+            self.in_use = False
+            player.can_move = True
+            print(f"Finished processing: {self.food_type}")  
+
+            if self.food_type == Tomato:
+                new_food = TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)
+                print("Created a TomatoSlice!")
+                player.pick_up(new_food)
+
+            self.food_type = None
+            #Evt skrive koden sånn:
+            #if self.food_type == Tomato:
+                #player.pick_up(TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)) 
+
+                
+                #elif self.food_type == rawPatty:
+                    #player.pick_up(CookedMeat(player.rect.x, player.rect.y, beef_img))
+
+ 
                 #TODO: spiller må få den kuttet versjonen av maten 
-                #player.pick_up(Food_class(player.rect.x, player.rect.y, food_img))
+                #player.pick_up(food_type(player.rect.x, player.rect.y, food_img))
 
     def draw(self, screen):
         if self.in_use:
@@ -179,6 +205,36 @@ class Food(Object, pg.sprite.Sprite):
         elif pg.time.get_ticks() - self.cooldown_timer >= self.cooldown_duration:
                 self.kill() #fjerner tomaten fra alle sprites
         super().update()
+
+#MAT klassene
+
+class Tomato(Food):  #Hel tomat
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class Lettuce(Food):  #Helt salathode
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class LettuceLeaf(Food):  #Salat blad
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class TomatoSlice(Food):  # kutta tomato
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class RawMeat(Food):  #raw kjott
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class RawPatty(Food):  #raw burgerkjott
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class CookedPatty(Food):  #stekt burgerkjott
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
 
 
         # TODO: 
