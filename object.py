@@ -166,6 +166,7 @@ class ActionStation(Object):
                 #player.pick_up(food_type(player.rect.x, player.rect.y, food_img))
 
     def draw(self, screen):
+        screen.blit(self.image, self.rect)
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
 

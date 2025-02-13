@@ -16,10 +16,15 @@ bread = pg.sprite.Group()
 
 tomato_station = FoodStation(700, 250, square_img)
 bread_station = FoodStation(650, 530, square_img)
+lettuce_station = FoodStation(850, 530, square_img)
 meat_station = FoodStation(780, 100, square_img)
 plate_station = ActionStation(360, 530, square_img)
 trash_station = ActionStation(330, 70, square_img)
-cutting_station1 =ActionStation(520, 70,square_img)
+cutting_station1 = ActionStation(510, 70,square_img)
+cutting_station2 = ActionStation(590, 70,square_img)
+cooking_station1 = ActionStation(970, 250,square_img)
+cooking_station2 = ActionStation(970, 160,square_img)
+deliver_station = ActionStation(240, 160,square_img)
 
 
 player1 = Player(500, 100, player1_d)
@@ -48,9 +53,14 @@ while running:
     tomato_station.draw(screen)
     bread_station.draw(screen)
     meat_station.draw(screen)
+    plate_station.draw(screen)
     cutting_station1.draw(screen)
+    cutting_station2.draw(screen)
+    cooking_station1.draw(screen)
+    cooking_station2.draw(screen)
     trash_station.draw(screen)
-    
+    lettuce_station.draw(screen)
+    deliver_station.draw(screen)
     # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
