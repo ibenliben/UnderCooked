@@ -61,6 +61,7 @@ while running:
     trash_station.draw(screen)
     lettuce_station.draw(screen)
     deliver_station.draw(screen)
+
     # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
@@ -75,15 +76,21 @@ while running:
     #TODO: Komprimer funksjonen under
 
     # hvis spillere prøver å plukke opp tomat
+
     if player1.rect.colliderect(tomato_station.rect) and player1.action ==True:
-        tomato_station.give_food(player1, Tomato, tomato_img)
+       tomato_station.give_food(player1, Tomato, tomato_img)
     if player2.rect.colliderect(tomato_station.rect) and player2.action ==True:
         tomato_station.give_food(player2, Tomato, tomato_img)
+
+
+    #tomato_station.use_station(player1, Tomato, tomato_img)    Kommenterer disse linjene vekk midlertidig, 
+    #tomato_station.use_station(player2, Tomato, tomato_img)
 
     if player1.rect.colliderect(bread_station.rect) and player1.action ==True:
         bread_station.give_food(player1, Food, burgerbread_img)
     if player2.rect.colliderect(bread_station.rect) and player2.action ==True:
         bread_station.give_food(player2, Food, burgerbread_img)
+
 
     if player1.rect.colliderect(meat_station.rect) and player1.action ==True:
         meat_station.give_food(player1, Food, beef_img)
