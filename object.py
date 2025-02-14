@@ -154,20 +154,11 @@ class ActionStation(Object):
                             new_food = sliced_food_class(player.rect.x, player.rect.y, food_img)
                             print(f"Created a {sliced_food_class}!")
                             player.pick_up(new_food)
-                            
+
             food_slice(Tomato, TomatoSlice, tomatoslice_img)
             food_slice(Lettuce, LettuceLeaf, leaf_img)
+            food_slice(RawMeat, RawPatty, rawpatty_img)
 
-
-            """       if self.food_type == Tomato:
-                    new_food = TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)
-                    print("Created a TomatoSlice!")
-                    player.pick_up(new_food)
-
-                if self.food_type == Lettuce:
-                    new_food = LettuceLeaf(player.rect.x, player.rect.y, leaf_img)
-                    print("Created a Lettuce leaf!")
-                    player.pick_up(new_food) """
 
             self.food_type = None
             #Evt skrive koden sånn:
