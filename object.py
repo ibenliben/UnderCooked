@@ -39,21 +39,25 @@ class Player(Object):
             new_rect.y += self.dy
             if not self.check_collision(new_rect, other_player):
                 self.rect.y += self.dy
+            self.image = p1_u
 
         if keys_pressed[kd]:
             new_rect.y -= self.dy
             if not self.check_collision(new_rect, other_player):
                 self.rect.y -= self.dy
+            self.image = p1_d
 
         if keys_pressed[kr]:
             new_rect.x += self.dx
             if not self.check_collision(new_rect, other_player):
                 self.rect.x += self.dx
+            self.image = p1_r
 
         if keys_pressed[kl]:
             new_rect.x -= self.dx
             if not self.check_collision(new_rect, other_player):
                 self.rect.x -= self.dx
+            self.image = p1_l
 
         if keys_pressed[pickup]:
             self.action = True
@@ -62,6 +66,8 @@ class Player(Object):
             self.action = False
             #print("action false")
 
+
+        #TODO: sette på riktig bilde for bevegelse
 
         self.rect.topleft = (self.rect.x, self.rect.y)
 

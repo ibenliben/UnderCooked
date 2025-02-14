@@ -27,8 +27,8 @@ cooking_station2 = ActionStation(970, 160,square_img)
 deliver_station = ActionStation(240, 160,square_img)
 
 
-player1 = Player(500, 100, player1_d)
-player2 = Player(400, 100, player2_d)
+player1 = Player(500, 100, p1_d)
+player2 = Player(400, 100, p2_d)
 
 
 running = True
