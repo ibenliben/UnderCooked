@@ -1,6 +1,6 @@
 import pygame as pg
 from constants import *
-from pygame.locals import (K_w, K_s, K_d, K_a, K_UP,K_LCTRL, K_RCTRL, K_DOWN, K_RIGHT, K_LEFT, K_SPACE, K_KP_ENTER, K_RSHIFT, K_LSHIFT)
+from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_SPACE, K_RETURN, K_RSHIFT, K_LSHIFT)
 
 pg.init()
 clock = pg.time.Clock()
@@ -66,8 +66,8 @@ while running:
     player2.draw(screen)
 
     
-    player1.update(K_w, K_s, K_d, K_a, K_LCTRL, player2)
-    player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RCTRL, player1)
+    player1.update(K_w, K_s, K_d, K_a, K_SPACE, player2)
+    player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1)
     #cutting_station1.update(player1)
     #cutting_station1.update(player2)
 
