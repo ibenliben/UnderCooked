@@ -30,6 +30,9 @@ deliver_station = ActionStation(240, 160,square_img)
 player1 = Player(500, 100, p1_d)
 player2 = Player(400, 100, p2_d)
 
+images1 = [p1_u, p1_d, p1_r, p1_l]
+images2 = [p2_u, p2_d, p2_r, p2_l]
+
 
 running = True
 while running:
@@ -67,8 +70,8 @@ while running:
     player2.draw(screen)
 
     
-    player1.update(K_w, K_s, K_d, K_a, K_SPACE, player2)
-    player2.update(K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1)
+    player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, player2)
+    player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1)
     #cutting_station1.update(player1)
     #cutting_station1.update(player2)
 
