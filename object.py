@@ -149,10 +149,25 @@ class ActionStation(Object):
             player.can_move = True
             print(f"Finished processing: {self.food_type}")  
 
-            if self.food_type == Tomato:
-                new_food = TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)
-                print("Created a TomatoSlice!")
-                player.pick_up(new_food)
+            def food_slice(food_class, sliced_food_class, food_img):
+                if self.food_type == food_class:
+                            new_food = sliced_food_class(player.rect.x, player.rect.y, food_img)
+                            print(f"Created a {sliced_food_class}!")
+                            player.pick_up(new_food)
+                            
+            food_slice(Tomato, TomatoSlice, tomatoslice_img)
+            food_slice(Lettuce, LettuceLeaf, leaf_img)
+
+
+            """       if self.food_type == Tomato:
+                    new_food = TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)
+                    print("Created a TomatoSlice!")
+                    player.pick_up(new_food)
+
+                if self.food_type == Lettuce:
+                    new_food = LettuceLeaf(player.rect.x, player.rect.y, leaf_img)
+                    print("Created a Lettuce leaf!")
+                    player.pick_up(new_food) """
 
             self.food_type = None
             #Evt skrive koden sånn:
@@ -179,12 +194,6 @@ class FoodStation(Object):
     def give_food(self, player, Food_class, food_img):
         if player.held_food is None and player.action == True:
             player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) 
-
-    #TODO: fikse funkjsonen under for å ungå gjenngående kode i main, 
-    # men får feilmeldingen at player ikke har en attributt som heter action, som er rart siden den har det
-    #def use_station(player, station, food_class, food_image): 
-    #    if player.rect.colliderect(station.rect) and player.action:
-    #       station.give_food(player, food_class, food_image)
 
 
 
@@ -251,7 +260,6 @@ class Bread(Food):
 
         # TODO: 
         # - må kunne plukkes opp etter kast
-        # - må kunne kutte opp tomat -> tomatoslice
         # - må kunne steke kjøtt
 
 class Wall(Object):

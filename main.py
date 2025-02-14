@@ -89,7 +89,7 @@ while running:
     food_from_station(lettuce_station, Lettuce, lettuce_img)
     food_from_station(meat_station, RawMeat, beef_img)
     food_from_station(bread_station, Bread, burgerbread_img)
-    food_from_station(bread_station, Bread, burgerbread_img)
+
 
     #tomato_station.use_station(player1, Tomato, tomato_img)    Kommenterer disse linjene vekk midlertidig, 
     #tomato_station.use_station(player2, Tomato, tomato_img)
