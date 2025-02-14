@@ -48,6 +48,10 @@ def food_from_station(station, food_class, food_img):
     if player2.rect.colliderect(station.rect) and player2.action ==True:
         tomato_station.give_food(player2, food_class, food_img)
 
+def use_station(station, player):
+    if player.rect.colliderect(station.rect) and player.action and player.held_food is not None:
+        station.use_station(player)
+
 
 running = True
 while running:
@@ -90,15 +94,10 @@ while running:
     #tomato_station.use_station(player1, Tomato, tomato_img)    Kommenterer disse linjene vekk midlertidig, 
     #tomato_station.use_station(player2, Tomato, tomato_img)
 
-    if player1.rect.colliderect(cutting_station1.rect) and player1.action and player1.held_food is not None:
-        cutting_station1.use_station(player1)
-    if player2.rect.colliderect(cutting_station1.rect) and player2.action and player2.held_food is not None:
-        cutting_station1.use_station(player2)
-
-    if player1.rect.colliderect(trash_station.rect) and player1.action ==True:
-        trash_station.use_station(player1)
-    if player2.rect.colliderect(trash_station.rect) and player2.action ==True:
-        trash_station.use_stationa(player2)
+    use_station(cutting_station1, player1)
+    use_station(cutting_station1, player2)
+    use_station(trash_station, player1)
+    use_station(trash_station, player2)
 
     if cutting_station1.in_use:  #forsøk på å ikke la spillerne bruke stasjonen samtidig
         cutting_station1.update(player1 if player1.can_move == False else player2)
