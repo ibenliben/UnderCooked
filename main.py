@@ -32,6 +32,12 @@ player2 = Player(400, 100, p2_d)
 
 images1 = [p1_u, p1_d, p1_r, p1_l]
 images2 = [p2_u, p2_d, p2_r, p2_l]
+stations = [tomato_station, bread_station, meat_station, plate_station, cutting_station1, cutting_station2, 
+            cooking_station1, cooking_station2, trash_station, lettuce_station, deliver_station]
+
+def draw_stations(stations):
+    for station in stations:
+        station.draw(screen)
 
 
 running = True
@@ -53,17 +59,7 @@ while running:
 
     # TODO: Skriv inn "score"/penger og tid
 
-    tomato_station.draw(screen)
-    bread_station.draw(screen)
-    meat_station.draw(screen)
-    plate_station.draw(screen)
-    cutting_station1.draw(screen)
-    cutting_station2.draw(screen)
-    cooking_station1.draw(screen)
-    cooking_station2.draw(screen)
-    trash_station.draw(screen)
-    lettuce_station.draw(screen)
-    deliver_station.draw(screen)
+    draw_stations(stations)
 
     # Flytter og tegner spilleren:
     player1.draw(screen)
