@@ -95,7 +95,6 @@ while running:
     if player2.rect.colliderect(cutting_station1.rect) and player2.action and player2.held_food is not None:
         cutting_station1.use_station(player2)
 
-        
     if player1.rect.colliderect(trash_station.rect) and player1.action ==True:
         trash_station.use_station(player1)
     if player2.rect.colliderect(trash_station.rect) and player2.action ==True:
