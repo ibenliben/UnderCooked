@@ -20,8 +20,8 @@ meat = pg.sprite.Group()
 
 
 
-player1 = Player(500, 100, player1_d)
-player2 = Player(400, 100, player2_d)
+player1 = Player(500, 100, p1_d)
+player2 = Player(400, 100, p2_d)
 
 
 running = True
