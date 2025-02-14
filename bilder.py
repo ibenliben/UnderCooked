@@ -25,7 +25,7 @@ PLAYER_HEIGHT = 40
 
 bg_img = pg.transform.scale(bg_img, SIZE)
 tomato_img = pg.transform.scale(tomato_img,(30, 30))
-tomatoslice_img = pg.transform.scale(tomatoslice_img,(30, 30))
+tomatoslice_img = pg.transform.scale(tomatoslice_img,(40, 40))
 beef_img = pg.transform.scale(beef_img,(40, 40))
 burgerbread_img = pg.transform.scale(burgerbread_img,(40, 40))
 cabbage_img = pg.transform.scale(cabbage_img,(30, 30))
