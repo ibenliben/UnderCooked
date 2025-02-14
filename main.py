@@ -6,11 +6,11 @@ pg.init()
 clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 
-from object import Player, Food, FoodStation, ActionStation, Tomato
+from object import *
 from bilder import *
 import score_text
 
-tomatoes = pg.sprite.Group()
+thrown_food = pg.sprite.Group()
 meat = pg.sprite.Group()
 bread = pg.sprite.Group()
 
@@ -30,6 +30,9 @@ deliver_station = ActionStation(240, 160,square_img)
 player1 = Player(500, 100, p1_d)
 player2 = Player(400, 100, p2_d)
 
+
+# FUNKSJONER 
+
 images1 = [p1_u, p1_d, p1_r, p1_l]
 images2 = [p2_u, p2_d, p2_r, p2_l]
 stations = [tomato_station, bread_station, meat_station, plate_station, cutting_station1, cutting_station2, 
@@ -38,6 +41,12 @@ stations = [tomato_station, bread_station, meat_station, plate_station, cutting_
 def draw_stations(stations):
     for station in stations:
         station.draw(screen)
+
+def food_from_station(station, food_class, food_img):
+    if player1.rect.colliderect(station.rect) and player1.action ==True:
+        tomato_station.give_food(player1, food_class, food_img)
+    if player2.rect.colliderect(station.rect) and player2.action ==True:
+        tomato_station.give_food(player2, food_class, food_img)
 
 
 running = True
@@ -71,30 +80,15 @@ while running:
     #cutting_station1.update(player1)
     #cutting_station1.update(player2)
 
-
-    #TODO: Komprimer funksjonen under
-
-    # hvis spillere prøver å plukke opp tomat
-
-    if player1.rect.colliderect(tomato_station.rect) and player1.action ==True:
-       tomato_station.give_food(player1, Tomato, tomato_img)
-    if player2.rect.colliderect(tomato_station.rect) and player2.action ==True:
-        tomato_station.give_food(player2, Tomato, tomato_img)
-
+    # hvis spiller vil plukke fra mat-stasjon
+    food_from_station(tomato_station, Tomato, tomato_img)
+    food_from_station(lettuce_station, Lettuce, lettuce_img)
+    food_from_station(meat_station, RawMeat, beef_img)
+    food_from_station(bread_station, Bread, burgerbread_img)
+    food_from_station(bread_station, Bread, burgerbread_img)
 
     #tomato_station.use_station(player1, Tomato, tomato_img)    Kommenterer disse linjene vekk midlertidig, 
     #tomato_station.use_station(player2, Tomato, tomato_img)
-
-    if player1.rect.colliderect(bread_station.rect) and player1.action ==True:
-        bread_station.give_food(player1, Food, burgerbread_img)
-    if player2.rect.colliderect(bread_station.rect) and player2.action ==True:
-        bread_station.give_food(player2, Food, burgerbread_img)
-
-
-    if player1.rect.colliderect(meat_station.rect) and player1.action ==True:
-        meat_station.give_food(player1, Food, beef_img)
-    if player2.rect.colliderect(meat_station.rect) and player2.action ==True:
-        meat_station.give_food(player2, Food, beef_img)
 
     if player1.rect.colliderect(cutting_station1.rect) and player1.action and player1.held_food is not None:
         cutting_station1.use_station(player1)
@@ -106,12 +100,11 @@ while running:
     if player2.rect.colliderect(trash_station.rect) and player2.action ==True:
         trash_station.use_stationa(player2)
 
-
     if cutting_station1.in_use:  #forsøk på å ikke la spillerne bruke stasjonen samtidig
         cutting_station1.update(player1 if player1.can_move == False else player2)
 
-    player1.throw(keys_pressed, K_LSHIFT, tomatoes)
-    player2.throw(keys_pressed, K_RSHIFT, tomatoes)
+    player1.throw(keys_pressed, K_LSHIFT, thrown_food)
+    player2.throw(keys_pressed, K_RSHIFT, thrown_food)
 
     # hvis spillerne holder noe, tegnes det opp
     if player1.held_food:
@@ -119,8 +112,8 @@ while running:
     if player2.held_food:
         player2.held_food.draw(screen)
 
-    tomatoes.update()
-    tomatoes.draw(screen)
+    thrown_food.update()
+    thrown_food.draw(screen)
     
 
     # Oppdater skjermen for å vise endringene:

@@ -66,9 +66,6 @@ class Player(Object):
             self.action = False
             #print("action false")
 
-
-        #TODO: sette på riktig bilde for bevegelse
-
         self.rect.topleft = (self.rect.x, self.rect.y)
 
         if self.held_food:
@@ -83,12 +80,11 @@ class Player(Object):
         #       return True
         return False
 
-    def throw(self, keys_pressed, k_throw, tomatoes):
+    def throw(self, keys_pressed, k_throw, thrown_food):
         # kan bare kaste mat hvis spilleren har mat
         if k_throw in keys_pressed and self.held_food:      
             center = self.rect.center
-            tomato = Food(center[0]-10, center[1]-10, tomato_img)
-            tomatoes.add(tomato)
+            thrown_food.add(self.held_food)
             self.held_food = None       # spilleren mister maten
 
         # TODO: all mat må kunne kastes - kan bare kaste maten spilleren holder. 
@@ -202,7 +198,6 @@ class Food(Object, pg.sprite.Sprite):
         self.cooldown_timer = 0
         self.cooldown_duration = 4000 
         
-       
     def update(self):
         self.dy += 0.1
 
@@ -225,15 +220,15 @@ class Tomato(Food):  #Hel tomat
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
+class TomatoSlice(Food):  # kutta tomato
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
 class Lettuce(Food):  #Helt salathode
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
 class LettuceLeaf(Food):  #Salat blad
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
-
-class TomatoSlice(Food):  # kutta tomato
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
@@ -249,8 +244,16 @@ class CookedPatty(Food):  #stekt burgerkjott
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
+class Bread(Food):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
 
         # TODO: 
         # - må kunne plukkes opp etter kast
         # - må kunne kutte opp tomat -> tomatoslice
         # - må kunne steke kjøtt
+
+class Wall(Object):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
