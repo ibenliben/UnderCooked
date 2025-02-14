@@ -178,6 +178,12 @@ class FoodStation(Object):
         if player.held_food is None and player.action == True:
             player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) 
 
+    #TODO: fikse funkjsonen under for å ungå gjenngående kode i main, 
+    # men får feilmeldingen at player ikke har en attributt som heter action, som er rart siden den har det
+    #def use_station(player, station, food_class, food_image): 
+    #    if player.rect.colliderect(station.rect) and player.action:
+    #       station.give_food(player, food_class, food_image)
+
 
 
 class Food(Object, pg.sprite.Sprite):
