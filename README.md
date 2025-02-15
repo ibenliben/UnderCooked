@@ -25,4 +25,6 @@ Bruk tastaturet for å kontrollere figurene:
 
 * Spiller 2: WASD for bevegelse, Space for handling
 
+* I tillegg kan begge spillere kaste mat (for å samarbeide) ved å trykke på shift-knappen på sin side
+
 ## God spilling og lykke til med matlagingen!
