@@ -128,7 +128,7 @@ class ActionStation(Object):
         super().__init__(x, y, image)
         self.in_use = False
         self.progress_bar = ProgressBar(4) 
-        self.food_type = None #lagrer typen mat som blir kutta/stekt 
+        self.food_type = None   #lagrer typen mat som blir kutta/stekt 
 
     def use_station(self, player):
         if player.held_food and player.action and not self.in_use:  
@@ -168,7 +168,6 @@ class ActionStation(Object):
                 
                 #elif self.food_type == rawPatty:
                     #player.pick_up(CookedMeat(player.rect.x, player.rect.y, beef_img))
-
  
                 #TODO: spiller må få den kuttet versjonen av maten 
                 #player.pick_up(food_type(player.rect.x, player.rect.y, food_img))
