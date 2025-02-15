@@ -83,17 +83,14 @@ class Player(Object):
     def throw(self, keys_pressed, k_throw, thrown_food):
         # kan bare kaste mat hvis spilleren har mat
         if k_throw in keys_pressed and self.held_food:      
-            center = self.rect.center
             thrown_food.add(self.held_food)
             self.held_food = None       # spilleren mister maten
 
-        # TODO: all mat må kunne kastes - kan bare kaste maten spilleren holder. 
     
     def pick_up(self, food):
         if self.held_food is None:
             print(f"Picking up: {type(food)}")  # Debug-melding
             self.held_food = food
-
 
     def put_down(self):
         self.held_food = None
@@ -159,6 +156,12 @@ class ActionStation(Object):
             food_slice(Lettuce, LettuceLeaf, leaf_img)
             food_slice(RawMeat, RawPatty, rawpatty_img)
 
+            def cook_meat():
+                if self.food_type == RawPatty:
+                    cookedpatty = CookedPatty(player.rect.x, player.rect.y, cookedpatty_img)
+                    print("Created a Cooked Patty!")
+                    player.pick_up(cookedpatty)
+            cook_meat()
 
             self.food_type = None
             #Evt skrive koden sånn:
@@ -184,8 +187,6 @@ class FoodStation(Object):
     def give_food(self, player, Food_class, food_img):
         if player.held_food is None and player.action == True:
             player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) 
-
-
 
 class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
@@ -214,7 +215,6 @@ class Food(Object, pg.sprite.Sprite):
         super().update()
 
 #MAT klassene
-
 class Tomato(Food):  #Hel tomat
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
@@ -247,11 +247,11 @@ class Bread(Food):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-
-        # TODO: 
-        # - må kunne plukkes opp etter kast
-        # - må kunne steke kjøtt
-
 class Wall(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
+
+
+# TODO: 
+# - må kunne plukkes opp etter kast
+# - må kunne steke kjøtt
