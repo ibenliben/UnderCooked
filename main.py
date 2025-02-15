@@ -54,6 +54,9 @@ def use_station(station):
     if player2.rect.colliderect(station.rect) and player2.action and player2.held_food is not None:
         station.use_station(player2)
 
+def update_station(station):
+        if station.in_use:  
+            station.update(player1 if not player1.can_move else player2)
 
 running = True
 while running:
@@ -97,13 +100,15 @@ while running:
     #tomato_station.use_station(player2, Tomato, tomato_img)
 
     use_station(cutting_station1)
-    #use_station(cutting_station2)
+    use_station(cutting_station2)
     use_station(trash_station)
     use_station(cooking_station1)
-    #use_station(cooking_station2)
+    use_station(cooking_station2)
 
-    if cutting_station1.in_use:  #forsøk på å ikke la spillerne bruke stasjonen samtidig
-        cutting_station1.update(player1 if player1.can_move == False else player2)
+    update_station(cutting_station1)
+    update_station(cutting_station2)
+    update_station(cooking_station1)
+    update_station(cooking_station2)
 
     player1.throw(keys_pressed, K_LSHIFT, thrown_food)
     player2.throw(keys_pressed, K_RSHIFT, thrown_food)
