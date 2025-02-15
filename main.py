@@ -17,19 +17,19 @@ wall_list = pg.sprite.Group()
 station_list = pg.sprite.Group()
 
 # STATIONS
-tomato_station = FoodStation(700, 250, 50, 40)
-bread_station = FoodStation(650, 530, 50, 40)
-lettuce_station = FoodStation(850, 530, 50, 40)
-meat_station = FoodStation(780, 100, 50, 40)
+tomato_station = FoodStation(670, 250, 110, 60)
+bread_station = FoodStation(650, 520, 60, 60)
+lettuce_station = FoodStation(850, 520, 60, 60)
+meat_station = FoodStation(780, 100, 60, 60)
 
-cutting_station1 = ActionStation(510, 70, 50, 40)
-cutting_station2 = ActionStation(590, 70, 50, 40)
-cooking_station1 = ActionStation(970, 250,50, 40)
-cooking_station2 = ActionStation(970, 160, 50, 40)
-plate_station = ActionStation(360, 530, 50, 40)
-deliver_station = ActionStation(240, 160, 50, 40)
+cutting_station1 = ActionStation(510, 70, 50, 70)
+cutting_station2 = ActionStation(590, 70, 50, 70)
+cooking_station1 = ActionStation(965, 250, 80, 40)
+cooking_station2 = ActionStation(965, 160, 80, 40)
+plate_station = ActionStation(330, 520, 150, 70)
+deliver_station = ActionStation(240, 160, 70, 150)
 
-trash_station = TrashStation(330, 70, 50, 50)
+trash_station = TrashStation(330, 70, 50, 70)
 
 stations = [tomato_station, bread_station, meat_station, plate_station, cutting_station1, cutting_station2, 
             cooking_station1, cooking_station2, trash_station, lettuce_station, deliver_station]

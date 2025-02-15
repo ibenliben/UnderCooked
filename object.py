@@ -120,16 +120,12 @@ class ProgressBar:
 class Station(pg.sprite.Sprite):
     def __init__(self, x, y, width, height):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface([width, height])
-        self.image.fill(RED)    # midlertidig røde statsjoner
+        self.image = pg.Surface([width, height], pg.SRCALPHA)   # aktiverer alfakanal for å kunne få gjennomsktig bokser
+        self.image.fill((0,0,0,0))  # fyller med gjennomsiktig
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
-        #self.image = pg.Surface([width, height], pg.SRCALPHA)   # aktiverer alfakanal for å kunne få gjennomsktig bokser
-        #self.image.fill((0,0,0,0))  # fyller med gjennomsiktig
-        
-    
 class ActionStation(Station):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
@@ -209,9 +205,6 @@ class FoodStation(Station):
 class Wall(Station):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
-
-        self.image = pg.Surface([width, height])
-        self.image.fill(BLACK)     # midlertidig svarte vegger 
     
 class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
