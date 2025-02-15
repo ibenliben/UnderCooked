@@ -2,7 +2,6 @@ import pygame as pg
 from constants import *
 from bilder import *
 
-
 class Object:
     def __init__(self, x, y, image):
         self.image = image 
@@ -25,8 +24,7 @@ class Player(Object):
         self.held_food = None   # spilleren holder ingen mat ved start
         self.can_move = True  
 
-
-    def update(self, imagelist , kd, ku, kr, kl, pickup, other_player):
+    def update(self, imagelist , kd, ku, kr, kl, pickup, other_player, wall_list):
         if not self.can_move:
             return
         
@@ -37,25 +35,25 @@ class Player(Object):
 
         if keys_pressed[ku]:
             new_rect.y += self.dy
-            if not self.check_collision(new_rect, other_player):
+            if not self.check_collision(new_rect, other_player, wall_list):
                 self.rect.y += self.dy
             self.image = imagelist[0]
 
         if keys_pressed[kd]:
             new_rect.y -= self.dy
-            if not self.check_collision(new_rect, other_player):
+            if not self.check_collision(new_rect, other_player, wall_list):
                 self.rect.y -= self.dy
             self.image = imagelist[1]
 
         if keys_pressed[kr]:
             new_rect.x += self.dx
-            if not self.check_collision(new_rect, other_player):
+            if not self.check_collision(new_rect, other_player, wall_list):
                 self.rect.x += self.dx
             self.image = imagelist[2]
 
         if keys_pressed[kl]:
             new_rect.x -= self.dx
-            if not self.check_collision(new_rect, other_player):
+            if not self.check_collision(new_rect, other_player, wall_list):
                 self.rect.x -= self.dx
             self.image = imagelist[3]
 
@@ -71,13 +69,12 @@ class Player(Object):
         if self.held_food:
             self.held_food.rect.center = self.rect.center   # tomaten føger etter spiller
 
-    def check_collision(self, new_rect, other_player):
+    def check_collision(self, new_rect, other_player, wall_list):
         if new_rect.colliderect(other_player.rect):
             return True
-        #TODO: kollisjon med vegger
-        #for wall in walls:
-        #   if new_rect.colliderect(wall):
-        #       return True
+        for wall in wall_list:
+            if new_rect.colliderect(wall):
+                return True
         return False
 
     def throw(self, keys_pressed, k_throw, thrown_food):
@@ -119,13 +116,26 @@ class ProgressBar:
 
     def is_complete(self):
         return self.progress >= 1
+
+class Station(pg.sprite.Sprite):
+    def __init__(self, x, y, width, height):
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.Surface([width, height])
+        self.image.fill(RED)    # midlertidig røde statsjoner
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+        #self.image = pg.Surface([width, height], pg.SRCALPHA)   # aktiverer alfakanal for å kunne få gjennomsktig bokser
+        #self.image.fill((0,0,0,0))  # fyller med gjennomsiktig
+        
     
-class ActionStation(Object):
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
+class ActionStation(Station):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
         self.in_use = False
         self.progress_bar = ProgressBar(4) 
-        self.food_type = None   #lagrer typen mat som blir kutta/stekt 
+        self.food_type = None   #lagrer typen mat som blir kutta/stekt  
 
     def use_station(self, player):
         if player.held_food and player.action and not self.in_use:  
@@ -185,18 +195,24 @@ class ActionStation(Object):
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
 
 class TrashStation(ActionStation):
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
 
-class FoodStation(Object):
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
+class FoodStation(Station):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
 
     def give_food(self, player, Food_class, food_img):
         if player.held_food is None and player.action == True:
             player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) 
 
+class Wall(Station):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
 
+        self.image = pg.Surface([width, height])
+        self.image.fill(BLACK)     # midlertidig svarte vegger 
+    
 class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
         pg.sprite.Sprite.__init__(self)
@@ -253,10 +269,6 @@ class CookedPatty(Food):  #stekt burgerkjott
         super().__init__(x, y, image)
 
 class Bread(Food):      #burgerbrød
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
-
-class Wall(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 

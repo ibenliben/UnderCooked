@@ -13,34 +13,50 @@ import score_text
 thrown_food = pg.sprite.Group()
 meat = pg.sprite.Group()
 bread = pg.sprite.Group()
+wall_list = pg.sprite.Group()
+station_list = pg.sprite.Group()
 
-tomato_station = FoodStation(700, 250, square_img)
-bread_station = FoodStation(650, 530, square_img)
-lettuce_station = FoodStation(850, 530, square_img)
-meat_station = FoodStation(780, 100, square_img)
+# STATIONS
+tomato_station = FoodStation(700, 250, 50, 40)
+bread_station = FoodStation(650, 530, 50, 40)
+lettuce_station = FoodStation(850, 530, 50, 40)
+meat_station = FoodStation(780, 100, 50, 40)
 
-cutting_station1 = ActionStation(510, 70,square_img)
-cutting_station2 = ActionStation(590, 70,square_img)
-cooking_station1 = ActionStation(970, 250,square_img)
-cooking_station2 = ActionStation(970, 160,square_img)
-plate_station = ActionStation(360, 530, square_img)
-deliver_station = ActionStation(240, 160,square_img)
+cutting_station1 = ActionStation(510, 70, 50, 40)
+cutting_station2 = ActionStation(590, 70, 50, 40)
+cooking_station1 = ActionStation(970, 250,50, 40)
+cooking_station2 = ActionStation(970, 160, 50, 40)
+plate_station = ActionStation(360, 530, 50, 40)
+deliver_station = ActionStation(240, 160, 50, 40)
 
-trash_station = TrashStation(330, 70, square_img)
+trash_station = TrashStation(330, 70, 50, 50)
 
-player1 = Player(500, 100, p1_d)
-player2 = Player(400, 100, p2_d)
-
-# FUNKSJONER 
-
-images1 = [p1_u, p1_d, p1_r, p1_l]
-images2 = [p2_u, p2_d, p2_r, p2_l]
 stations = [tomato_station, bread_station, meat_station, plate_station, cutting_station1, cutting_station2, 
             cooking_station1, cooking_station2, trash_station, lettuce_station, deliver_station]
+for station in stations:
+    station_list.add(station)
 
-def draw_stations(stations):
-    for station in stations:
-        station.draw(screen)
+player1 = Player(400, 200, p1_d)
+player2 = Player(830, 200, p2_d)
+
+#VEGGER
+topwall = Wall(215, 48, HORIZONTAL_WALL_WIDTH, HORIZONTAL_WALL_HEIGHT)
+wall_list.add(topwall)
+bottomwall = Wall(215, 535, HORIZONTAL_WALL_WIDTH, HORIZONTAL_WALL_HEIGHT)
+wall_list.add(bottomwall)
+lefttwall = Wall(215, 70, SIDEWALL_WIDTH, SIDEWALL_HEIGHT)
+wall_list.add(lefttwall)
+rightwall = Wall(970, 70, SIDEWALL_WIDTH, SIDEWALL_HEIGHT)
+wall_list.add(rightwall)
+middle_wall_v = Wall(680, 115, 75, 276)
+wall_list.add(middle_wall_v)
+middle_wall_h = Wall(501, 341, 254, 60)
+wall_list.add(middle_wall_h)
+
+# FUNKSJONER 
+images1 = [p1_u, p1_d, p1_r, p1_l]
+images2 = [p2_u, p2_d, p2_r, p2_l]
+
 
 def food_from_station(station, food_class, food_img):
     if player1.rect.colliderect(station.rect) and player1.action ==True:
@@ -77,16 +93,18 @@ while running:
 
     # TODO: Skriv inn "score"/penger og tid
 
-    draw_stations(stations)
 
     # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
 
-    player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, player2)
-    player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1)
+    player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, player2, wall_list)
+    player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1, wall_list)
     #cutting_station1.update(player1)
     #cutting_station1.update(player2)
+
+    wall_list.draw(screen)
+    station_list.draw(screen)
 
     # hvis spiller vil plukke fra mat-stasjon
     food_from_station(tomato_station, Tomato, tomato_img)
