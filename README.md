@@ -6,17 +6,15 @@ Prosjektet er laget av:
 * Iben Foldnes Reiremo á ibenliben 
 
 # Om prosjektet
-Velkommen til UnderCooked – en forenklet pygame versjon av det populære spillet Overcooked! Her kan spillere samarbeide for å lage mat, holde styr på ordrer og levere ferdige måltider innen tidsfristen.
+Velkommen til UnderCooked – en forenklet pygame versjon av det populære spillet Overcooked! Her kan spillere samarbeide for å lage mat og levere ferdige måltider innen en tidsramme.
 
 
 ## Funksjoner
 * Flerspillersamarbeid: Spill sammen med en venn for å lage mat og klare utfordringer.
 
-* Interaktive oppgaver: Håndter ingredienser, kok, stek og server måltider.
+* Interaktive oppgaver: Håndter ingredienser, stek og server måltider.
 
-* Tidsstyring: Klarer dere å holde tritt med ordrene?
-
-* Progressivt gameplay: Flere utfordringer jo lengre dere spiller.
+* Tidsstyring: Klarer dere å holde tritt med tiden?
 
 ## Spillerne
 Bruk tastaturet for å kontrollere figurene:
