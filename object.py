@@ -263,4 +263,4 @@ class Wall(Object):
 
 # TODO: 
 # - må kunne plukkes opp etter kast
-# - må IKKE kunne bruke sliced food i kuttestasjon aka ingenting skjer om man prøver
+# - må IKKE kunne bruke sliced food i kuttestasjon aka ingenting skjer om du pøver å kutte noe som allerede er kutta

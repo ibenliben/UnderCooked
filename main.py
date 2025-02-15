@@ -18,12 +18,14 @@ tomato_station = FoodStation(700, 250, square_img)
 bread_station = FoodStation(650, 530, square_img)
 lettuce_station = FoodStation(850, 530, square_img)
 meat_station = FoodStation(780, 100, square_img)
-plate_station = ActionStation(360, 530, square_img)
+
 cutting_station1 = ActionStation(510, 70,square_img)
 cutting_station2 = ActionStation(590, 70,square_img)
 cooking_station1 = ActionStation(970, 250,square_img)
 cooking_station2 = ActionStation(970, 160,square_img)
+plate_station = ActionStation(360, 530, square_img)
 deliver_station = ActionStation(240, 160,square_img)
+
 trash_station = TrashStation(330, 70, square_img)
 
 player1 = Player(500, 100, p1_d)
