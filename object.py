@@ -146,12 +146,17 @@ class ActionStation(Object):
             player.can_move = True
             print(f"Finished processing: {self.food_type}")  
 
+            def trash_food():
+                if isinstance(self, TrashStation) and player.held_food:
+                    print(f"{type(player.held_food).__name__} thrown in the trash!")
+                    player.put_down()  # fjerner maten fra spilleren
+            trash_food()
+
             def food_slice(food_class, sliced_food_class, food_img):
-                if self.food_type == food_class:
+                if self.food_type == food_class and not isinstance(self, TrashStation):
                             new_food = sliced_food_class(player.rect.x, player.rect.y, food_img)
                             print(f"Created a {sliced_food_class}!")
-                            player.pick_up(new_food)
-
+                            player.pick_up(new_food)                            
             food_slice(Tomato, TomatoSlice, tomatoslice_img)
             food_slice(Lettuce, LettuceLeaf, leaf_img)
             food_slice(RawMeat, RawPatty, rawpatty_img)
@@ -164,21 +169,24 @@ class ActionStation(Object):
             cook_meat()
 
             self.food_type = None
+
             #Evt skrive koden sånn:
             #if self.food_type == Tomato:
                 #player.pick_up(TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)) 
 
-                
                 #elif self.food_type == rawPatty:
                     #player.pick_up(CookedMeat(player.rect.x, player.rect.y, beef_img))
- 
-                #TODO: spiller må få den kuttet versjonen av maten 
+
                 #player.pick_up(food_type(player.rect.x, player.rect.y, food_img))
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
+
+class TrashStation(ActionStation):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
 
 class FoodStation(Object):
     def __init__(self, x, y, image):
@@ -187,6 +195,7 @@ class FoodStation(Object):
     def give_food(self, player, Food_class, food_img):
         if player.held_food is None and player.action == True:
             player.pick_up(Food_class(player.rect.x, player.rect.y, food_img)) 
+
 
 class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
@@ -243,7 +252,7 @@ class CookedPatty(Food):  #stekt burgerkjott
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class Bread(Food):
+class Bread(Food):      #burgerbrød
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
@@ -254,4 +263,4 @@ class Wall(Object):
 
 # TODO: 
 # - må kunne plukkes opp etter kast
-# - må kunne steke kjøtt
+# - må IKKE kunne bruke sliced food i kuttestasjon aka ingenting skjer om man prøver

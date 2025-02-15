@@ -19,17 +19,15 @@ bread_station = FoodStation(650, 530, square_img)
 lettuce_station = FoodStation(850, 530, square_img)
 meat_station = FoodStation(780, 100, square_img)
 plate_station = ActionStation(360, 530, square_img)
-trash_station = ActionStation(330, 70, square_img)
 cutting_station1 = ActionStation(510, 70,square_img)
 cutting_station2 = ActionStation(590, 70,square_img)
 cooking_station1 = ActionStation(970, 250,square_img)
 cooking_station2 = ActionStation(970, 160,square_img)
 deliver_station = ActionStation(240, 160,square_img)
-
+trash_station = TrashStation(330, 70, square_img)
 
 player1 = Player(500, 100, p1_d)
 player2 = Player(400, 100, p2_d)
-
 
 # FUNKSJONER 
 
@@ -58,6 +56,7 @@ def update_station(station):
         if station.in_use:  
             station.update(player1 if not player1.can_move else player2)
 
+
 running = True
 while running:
     keys_pressed = []
@@ -69,7 +68,6 @@ while running:
         if event.type == pg.KEYDOWN:
             keys_pressed.append(event.key)
             
-
     clock.tick(FPS)
 
     # Tegner bakgrunnsbildet:
@@ -83,7 +81,6 @@ while running:
     player1.draw(screen)
     player2.draw(screen)
 
-    
     player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, player2)
     player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1)
     #cutting_station1.update(player1)
@@ -95,20 +92,20 @@ while running:
     food_from_station(meat_station, RawMeat, beef_img)
     food_from_station(bread_station, Bread, burgerbread_img)
 
-
     #tomato_station.use_station(player1, Tomato, tomato_img)    Kommenterer disse linjene vekk midlertidig, 
     #tomato_station.use_station(player2, Tomato, tomato_img)
 
     use_station(cutting_station1)
     use_station(cutting_station2)
-    use_station(trash_station)
     use_station(cooking_station1)
     use_station(cooking_station2)
+    use_station(trash_station)
 
     update_station(cutting_station1)
     update_station(cutting_station2)
     update_station(cooking_station1)
     update_station(cooking_station2)
+    update_station(trash_station)
 
     player1.throw(keys_pressed, K_LSHIFT, thrown_food)
     player2.throw(keys_pressed, K_RSHIFT, thrown_food)
