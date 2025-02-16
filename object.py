@@ -1,7 +1,7 @@
 import pygame as pg
 from constants import *
 from bilder import *
-
+ 
 class Object:
     def __init__(self, x, y, image):
         self.image = image 
@@ -24,53 +24,6 @@ class Player(Object):
         self.held_food = None   # spilleren holder ingen mat ved start
         self.can_move = True  
 
-        """     
-    def update(self, imagelist , kd, ku, kr, kl, pickup, other_player, wall_list):
-        if not self.can_move:
-            return
-        
-        self.dx = 3.5
-        self.dy = 3.5
-        keys_pressed = pg.key.get_pressed()
-        new_rect = self.rect.copy()
-
-        if keys_pressed[ku]:
-            new_rect.y += self.dy
-            if not self.check_collision(new_rect, other_player, wall_list):
-                self.rect.y += self.dy
-            self.image = imagelist[0]
-
-        if keys_pressed[kd]:
-            new_rect.y -= self.dy
-            if not self.check_collision(new_rect, other_player, wall_list):
-                self.rect.y -= self.dy
-            self.image = imagelist[1]
-
-        if keys_pressed[kr]:
-            new_rect.x += self.dx
-            if not self.check_collision(new_rect, other_player, wall_list):
-                self.rect.x += self.dx
-            self.image = imagelist[2]
-
-        if keys_pressed[kl]:
-            new_rect.x -= self.dx
-            if not self.check_collision(new_rect, other_player, wall_list):
-                self.rect.x -= self.dx
-            self.image = imagelist[3]
-
-        if keys_pressed[pickup]:
-            self.action = True
-            #print("action true")
-        else: 
-            self.action = False
-            #print("action false")
-
-        self.rect.topleft = (self.rect.x, self.rect.y)
-
-        if self.held_food:
-            self.held_food.rect.center = self.rect.center   # tomaten føger etter spiller
-
-    """ 
     def update(self, imagelist , kd, ku, kr, kl, pickup, other_player, wall_list):
         if not self.can_move:
             return

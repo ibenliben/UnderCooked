@@ -71,8 +71,9 @@ def use_station(station):
         station.use_station(player2)
 
 def update_station(station):
-        if station.in_use:  
+    if station.in_use:  
             station.update(player1 if not player1.can_move else player2)
+    station.draw(screen) 
 
 
 running = True
