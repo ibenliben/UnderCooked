@@ -136,10 +136,10 @@ while running:
         player1.held_food.draw(screen)
     if player2.held_food:
         player2.held_food.draw(screen)
-
-    thrown_food.update()
-    thrown_food.draw(screen)
     
+    for food in thrown_food:
+        food.update()
+        food.draw(screen)
 
     # Oppdater skjermen for å vise endringene:
     pg.display.update()

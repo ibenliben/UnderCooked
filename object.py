@@ -205,20 +205,24 @@ class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
         pg.sprite.Sprite.__init__(self)
         super().__init__(x, y, image)
-        self.dx = 5
-        self.dy = -3
+        self.dx = 3
+        self.dy = -2
         self.y_start = self.rect.y
         self.cooldown_timer = 0
-        self.cooldown_duration = 4000 
+        self.cooldown_duration = 9000 
         
     def update(self):
         self.dy += 0.1
+        # oppdaterer posisjonen basert på hastigheten
+        self.rect.x += self.dx
+        self.rect.y += self.dy
 
         # stopper når den treffer bakken
         if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
             self.dx = 0
             self.dy = 0
             self.rect.y = self.y_start
+
 
         #lager en cooldown timer
         if self.cooldown_timer == 0:
