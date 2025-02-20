@@ -161,7 +161,7 @@ class ActionStation(Station):
 #            trash_food()
 
             def food_slice(food_class, sliced_food_class, food_img):
-                if self.food_type == food_class and not isinstance(self, TrashStation):
+                if self.food_type == food_class:
                             new_food = sliced_food_class(player.rect.x, player.rect.y, food_img)
                             print(f"Created a {sliced_food_class}!")
                             player.pick_up(new_food)                            
