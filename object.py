@@ -104,6 +104,8 @@ class ProgressBar:
             self.progress = min(elapsed_time / self.duration, 1) 
 
     def draw(self, screen, x, y, width, height):
+        if self.start_time is None:  #dersom progressbaren ikke er starta skal den ikke tegnes heller
+            return
         border_rect = pg.Rect(x - 2, y - 2, width + 4, height + 4)  # Litt større enn progress bar
         pg.draw.rect(screen, (255, 255, 255), border_rect, 2)  
         pg.draw.rect(screen, (255, 0, 0), (x, y, width, height)) # Rød bakgrunn
@@ -122,21 +124,25 @@ class Station(pg.sprite.Sprite):
         self.rect.y = y
 
 class ActionStation(Station):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, progress):
         super().__init__(x, y, width, height)
         self.in_use = False
         self.progress_bar = ProgressBar(4) 
         self.food_type = None   #lagrer typen mat som blir kutta/stekt  
+        self.progress = progress
 
     def use_station(self, player):
         if player.held_food and player.action and not self.in_use:  
             print(f"Started processing: {type(player.held_food)}")  # Debug-melding
             self.in_use = True
-            player.can_move = False
-            self.progress_bar.start()
             self.food_type = type(player.held_food)
-            player.put_down()
+
+            if self.progress:  # Only run the progress bar if progress is enabled
+                self.progress_bar.start()
+                player.can_move = False
             
+            player.put_down()  
+
     def update(self, player):
         if not self.in_use:  # Legger til en sjekk
             return
@@ -145,13 +151,14 @@ class ActionStation(Station):
         if self.progress_bar.is_complete():
             self.in_use = False
             player.can_move = True
-            print(f"Finished processing: {self.food_type}")  
+            print(f"Finished processing: {self.food_type}")
 
-            def trash_food():
-                if isinstance(self, TrashStation) and player.held_food:
-                    print(f"{type(player.held_food).__name__} thrown in the trash!")
-                    player.put_down()  # fjerner maten fra spilleren
-            trash_food()
+
+#            def trash_food():
+#               if isinstance(self, TrashStation) and player.held_food:
+#                   print(f"{type(player.held_food).__name__} thrown in the trash!")
+#                     player.put_down()  # fjerner maten fra spilleren
+#            trash_food()
 
             def food_slice(food_class, sliced_food_class, food_img):
                 if self.food_type == food_class and not isinstance(self, TrashStation):

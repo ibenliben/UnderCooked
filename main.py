@@ -22,14 +22,14 @@ bread_station = FoodStation(650, 520, 60, 60)
 lettuce_station = FoodStation(850, 520, 60, 60)
 meat_station = FoodStation(780, 100, 60, 60)
 
-cutting_station1 = ActionStation(510, 70, 50, 70)
-cutting_station2 = ActionStation(590, 70, 50, 70)
-cooking_station1 = ActionStation(965, 250, 80, 40)
-cooking_station2 = ActionStation(965, 160, 80, 40)
-plate_station = ActionStation(330, 520, 150, 70)
-deliver_station = ActionStation(240, 160, 70, 150)
+cutting_station1 = ActionStation(510, 70, 50, 70, True)
+cutting_station2 = ActionStation(590, 70, 50, 70, True)
+cooking_station1 = ActionStation(965, 250, 80, 40, True)
+cooking_station2 = ActionStation(965, 160, 80, 40, True)
+plate_station = ActionStation(330, 520, 150, 70, False)
+deliver_station = ActionStation(240, 160, 70, 150, False)
 
-trash_station = TrashStation(330, 70, 50, 70)
+trash_station = ActionStation(330, 70, 50, 70, False)
 
 stations = [tomato_station, bread_station, meat_station, plate_station, cutting_station1, cutting_station2, 
             cooking_station1, cooking_station2, trash_station, lettuce_station, deliver_station]
