@@ -163,7 +163,7 @@ class ActionStation(Station):
             food_slice(RawMeat, RawPatty, rawpatty_img)
 
             def cook_meat():
-                if self.food_type == RawPatty:
+                if isinstance(player.held_food, RawPatty):  # kun rå patty kan stekes
                     cookedpatty = CookedPatty(player.rect.x, player.rect.y, cookedpatty_img)
                     print("Created a Cooked Patty!")
                     player.pick_up(cookedpatty)
@@ -175,6 +175,16 @@ class ActionStation(Station):
         screen.blit(self.image, self.rect)
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
+
+class CookingStation(ActionStation):
+    def __init__(self, x, y, width, height, progress):
+        super().__init__(x, y, width, height, progress)
+
+    def use_station(self, player):
+        if isinstance(player.held_food, RawPatty):  # Kun rått kjøtt kan stekes
+            self.in_use = True
+            player.held_food = CookedPatty(player.held_food.rect.x, player.held_food.rect.y, cookedpatty_img)  # bytter ut med stekt kjøtt
+    
 class PlateStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
         super().__init__(x, y, width, height, in_use)
