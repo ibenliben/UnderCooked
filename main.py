@@ -18,15 +18,15 @@ station_list = pg.sprite.Group()
 
 # STATIONS
 tomato_station = FoodStation(670, 250, 110, 60)
-bread_station = FoodStation(650, 520, 60, 60)
-lettuce_station = FoodStation(850, 520, 60, 60)
+bread_station = FoodStation(650, 500, 60, 60)
+lettuce_station = FoodStation(850, 500, 60, 60)
 meat_station = FoodStation(780, 100, 60, 60)
 
 cutting_station1 = ActionStation(510, 70, 50, 70, True)
 cutting_station2 = ActionStation(590, 70, 50, 70, True)
 cooking_station1 = ActionStation(965, 250, 80, 40, True)
 cooking_station2 = ActionStation(965, 160, 80, 40, True)
-plate_station = PlateStation(330, 520, 150, 70, False)
+plate_station = PlateStation(330, 500, 150, 70, False)
 deliver_station = DeliverStation(240, 160, 70, 150, False)
 
 trash_station = ActionStation(330, 70, 50, 70, False)
@@ -106,6 +106,9 @@ while running:
     wall_list.draw(screen)
     station_list.draw(screen)
 
+    #plate_station.draw(screen)
+    #deliver_station.draw(screen)
+
     # hvis spiller vil plukke fra mat-stasjon
     food_from_station(tomato_station, Tomato, tomato_img)
     food_from_station(lettuce_station, Lettuce, lettuce_img)
@@ -123,6 +126,31 @@ while running:
     update_station(cooking_station1)
     update_station(cooking_station2)
     update_station(trash_station)
+
+# plate og deliver station
+    if player1.rect.colliderect(plate_station.rect) and player1.action:
+        plate_station.place_ingredient(player1)
+
+    if player2.rect.colliderect(plate_station.rect) and player2.action:
+        plate_station.place_ingredient(player2)
+
+    if player1.rect.colliderect(plate_station.rect) and player1.action:
+        plate_station.pick_up_burger(player1)
+
+    if player2.rect.colliderect(plate_station.rect) and player2.action:
+        plate_station.pick_up_burger(player2)
+
+    if player1.rect.colliderect(deliver_station.rect) and player1.action:
+        deliver_station.deliver_burger(player1)
+
+    if player2.rect.colliderect(deliver_station.rect) and player2.action:
+        deliver_station.deliver_burger(player2)
+
+    plate_station.draw(screen)
+    deliver_station.draw(screen)
+    deliver_station.update()
+
+
 
     player1.throw(keys_pressed, K_LSHIFT, thrown_food)
     player2.throw(keys_pressed, K_RSHIFT, thrown_food)

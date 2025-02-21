@@ -175,31 +175,36 @@ class ActionStation(Station):
         screen.blit(self.image, self.rect)
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
-
 class PlateStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
         super().__init__(x, y, width, height, in_use)
-        self.ingredients = set()
+        self.ingredients = []
         self.completed_burger = False
-
+        
     def place_ingredient(self, player):
         if player.held_food:
-            if isinstance(player.held_food, (Bread, Tomato, Lettuce, CookedPatty)):
-                self.ingredients.add(type(player.held_food))
-                player.held_food = None     # spilleren legger fra seg maten
-
-            # sjekker om alle ingredienser er der
-            if {Bread, Tomato, Lettuce, CookedPatty}.issubset(self.ingredients):
+            if isinstance(player.held_food, (Bread, TomatoSlice, LettuceLeaf, CookedPatty)) and not any(isinstance(i, type(player.held_food)) for i in self.ingredients):
+                self.ingredients.append(player.held_food)
+                player.held_food = None  # spilleren legger fra seg maten
+                
+            # sjekker om alle ingrediensene er der
+            if {Bread, TomatoSlice, LettuceLeaf, CookedPatty} == {type(i) for i in self.ingredients}:
                 self.completed_burger = True
-                self.ingredients.clear()    # fjerner ingrediensene, blir burger
-
+                self.ingredients.clear()  # fjerner ingrediensene, de blir til en burger
+                
     def pick_up_burger(self, player):
         if self.completed_burger and not player.held_food:
-            player.held_food = Burger()
-            self.completed_burger = False   # fjerner burgeren far plate stasjonen
+            player.held_food = Burger(self.rect.x, self.rect.y, burger_img)
+            self.completed_burger = False  # fjerner burgeren fra tallerkenen
     
     def draw(self, screen):
         super().draw(screen)
+        x_offset = -len(self.ingredients) * 10 // 2  # startpunkt for å sentrere ingrediensene
+        for ingredient in self.ingredients:
+            ingredient_x = self.rect.centerx - ingredient.image.get_width() // 2 + x_offset
+            ingredient_y = self.rect.centery - ingredient.image.get_height() // 2
+            screen.blit(ingredient.image, (ingredient_x, ingredient_y))
+            x_offset += 20  # øker mellomrommet mellom ingredienser
         if self.completed_burger:
             screen.blit(burger_img, (self.rect.x, self.rect.y))
 
@@ -207,19 +212,25 @@ class DeliverStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
         super().__init__(x, y, width, height, in_use)
         self.delivery_time = 0
-
+        self.delivered_burger = False  # variabel for å vite om en burger er levert
 
     def deliver_burger(self, player):
         if isinstance(player.held_food, Burger):
             player.held_food = None  # spilleren leverer burgeren
             self.delivery_time = pg.time.get_ticks()  # starter timer
+            self.delivered_burger = True  # burger er levert
 
     def update(self):
-        if self.delivery_time and pg.time.get_ticks() - self.delivery_time > 4000:
-            self.delivery_time = 0  # resetter etter 4 sekunder
+        if self.delivery_time and pg.time.get_ticks() - self.delivery_time > 3000:
+            self.delivery_time = 0  # resetter etter 3 sekunder
+            self.delivered_burger = False     # fjerner burger etter 3 sek
 
     def draw(self, screen):
         super().draw(screen)
+        if self.delivered_burger:
+            burger_x = self.rect.centerx - burger_img.get_width() // 2
+            burger_y = self.rect.centery - burger_img.get_height() // 2
+            screen.blit(burger_img, (burger_x, burger_y))  # tegner burgeren på midten
 
 class TrashStation(ActionStation):
     def __init__(self, x, y, width, height):

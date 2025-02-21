@@ -35,7 +35,7 @@ rawpatty_img = pg.transform.scale(rawpatty_img,(40, 40))
 burgerbread_img = pg.transform.scale(burgerbread_img,(40, 40))
 lettuce_img = pg.transform.scale(lettuce_img,(30, 30))
 leaf_img = pg.transform.scale(leaf_img,(30, 30))
-burger = pg.transform.scale(burger_img, (30, 30))
+burger_img = pg.transform.scale(burger_img, (30, 30))
 station_img = pg.transform.scale(station_img,(60, 60))
 square_img = pg.transform.scale(square_img,(60, 60))
 
