@@ -14,6 +14,7 @@ burger_img = pg.image.load("assets/burger.png").convert_alpha()
 station_img = pg.image.load("assets/station.png").convert_alpha()
 square_img = pg.image.load("assets/square.png").convert_alpha()
 
+
 #SPILLERNE
 p1_d = pg.image.load("assets/player/p1back.png").convert_alpha()
 p2_d = pg.image.load("assets/player/p2back.png").convert_alpha()

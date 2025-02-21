@@ -1,6 +1,7 @@
 import pygame as pg
 from constants import *
 from bilder import *
+import random as random
  
 class Object:
     def __init__(self, x, y, image):
@@ -28,6 +29,7 @@ class Player(Object):
         if not self.can_move:
             return
         speed = 3.5
+        speed = 6 #MIDLERTIDIG økt farten til spilleren under beta fasen grunnet raskere debuggings muligheter
         dx, dy = 0, 0  # Midlertidig bevegelse
         keys_pressed = pg.key.get_pressed()
 
@@ -128,6 +130,7 @@ class ActionStation(Station):
         super().__init__(x, y, width, height)
         self.in_use = False
         self.progress_bar = ProgressBar(4) 
+        self.progress_bar = ProgressBar(2)#øker hastigheten til progressbaren under beta fasen
         self.food_type = None   #lagrer typen mat som blir kutta/stekt  
         self.progress = progress
 
@@ -315,7 +318,61 @@ class Burger(Food):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
+class Order:
+    def __init__(self, x, y):
+        self.x = x
+        self.width = 120  
+        self.height = 120
+        self.ingredients = self.generate_order()
+        self.rect = pg.Rect(x, y, self.width, self.height) 
+        self.speed = 0.5 
+        self.background_color = (200, 200, 200)
+        self.image = burger_img  #
 
-# TODO: 
-# - må kunne plukkes opp etter kast/ bare fjerne kasting
-# - må IKKE kunne bruke sliced food i kuttestasjon aka ingenting skjer om du pøver å kutte noe som allerede er kutta
+    def generate_order(self):
+
+        base = ["Bread", "Patty"]  # Every order has bread and meat
+        optional = ["Lettuce", "Tomato", "Cheese"]
+        num_toppings = random.randint(1, len(optional))
+        toppings = random.sample(optional, num_toppings)  # Randomly select toppings
+        return base + toppings
+
+    def update(self):
+        """Move the order downward."""
+        self.rect.y += self.speed
+
+    def draw(self, screen):
+        """Draw the order background, image, and ingredient list."""
+        # Draw background
+        bg_rect = pg.Rect(self.rect.x, self.rect.y, self.width, self.height)
+        pg.draw.rect(screen, self.background_color, bg_rect, border_radius=10)
+
+        # Draw order image
+        screen.blit(self.image, (self.rect.x + 10, self.rect.y + 10))  # Offset for padding
+
+        # Draw ingredients as text
+        font = pg.font.Font(None, 24)
+        for i, ingredient in enumerate(self.ingredients):
+            text = font.render(ingredient, True, (0, 0, 0))  # Black text
+            screen.blit(text, (self.rect.x + 50, self.rect.y + 10 + (i * 20)))
+
+    def check_order(self, player, orders, score):
+        if not orders or not player.held_food:
+            return score  
+
+        delivered_ingredients = player.held_food.ingredients
+        current_order = orders[0].ingredients
+
+        if delivered_ingredients == current_order:
+            print(f"Correct order delivered! Score +10. New score: {score + 10}")
+            score += 10
+            orders.pop(0)  # fjerner den ferdige bestillingen fra listen
+        else:
+            print("welp. feil bestilling")
+
+        return score
+class Burger:
+    def __init__(self, x, y, image, ingredients):
+        self.image = image
+        self.ingredients = ingredients #liste med hva som er på burgeren
+        self.rect = self.image.get_rect(center = (x,y))

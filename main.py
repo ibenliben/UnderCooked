@@ -10,6 +10,10 @@ from object import *
 from bilder import *
 import score_text
 
+orders = []
+spawn_timer = 0
+spawn_interval = 300 #hvor ofte det skal komme en ny bestilling, (i frames)
+
 thrown_food = pg.sprite.Group()
 meat = pg.sprite.Group()
 bread = pg.sprite.Group()
@@ -164,6 +168,16 @@ while running:
     for food in thrown_food:
         food.update()
         food.draw(screen)
+
+
+    spawn_timer += 1
+    if spawn_timer >= spawn_interval:
+        orders.append(Order(10,10))
+        spawn_timer = 0 
+
+    for order in orders:
+        order.update()
+        order.draw(screen)
 
     # Oppdater skjermen for å vise endringene:
     pg.display.update()
