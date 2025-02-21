@@ -28,8 +28,8 @@ meat_station = FoodStation(780, 100, 60, 60)
 
 cutting_station1 = ActionStation(510, 70, 50, 70, True)
 cutting_station2 = ActionStation(590, 70, 50, 70, True)
-cooking_station1 = ActionStation(965, 250, 80, 40, True)
-cooking_station2 = ActionStation(965, 160, 80, 40, True)
+cooking_station1 = CookingStation(965, 250, 80, 40, True)
+cooking_station2 = CookingStation(965, 160, 80, 40, True)
 plate_station = PlateStation(330, 500, 150, 70, False)
 deliver_station = DeliverStation(240, 160, 70, 150, False)
 
