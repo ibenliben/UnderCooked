@@ -26,8 +26,8 @@ cutting_station1 = ActionStation(510, 70, 50, 70, True)
 cutting_station2 = ActionStation(590, 70, 50, 70, True)
 cooking_station1 = ActionStation(965, 250, 80, 40, True)
 cooking_station2 = ActionStation(965, 160, 80, 40, True)
-plate_station = ActionStation(330, 520, 150, 70, False)
-deliver_station = ActionStation(240, 160, 70, 150, False)
+plate_station = PlateStation(330, 520, 150, 70, False)
+deliver_station = DeliverStation(240, 160, 70, 150, False)
 
 trash_station = ActionStation(330, 70, 50, 70, False)
 
@@ -101,8 +101,7 @@ while running:
 
     player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, player2, wall_list)
     player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1, wall_list)
-    #cutting_station1.update(player1)
-    #cutting_station1.update(player2)
+
 
     wall_list.draw(screen)
     station_list.draw(screen)
@@ -112,9 +111,6 @@ while running:
     food_from_station(lettuce_station, Lettuce, lettuce_img)
     food_from_station(meat_station, RawMeat, beef_img)
     food_from_station(bread_station, Bread, burgerbread_img)
-
-    #tomato_station.use_station(player1, Tomato, tomato_img)    Kommenterer disse linjene vekk midlertidig, 
-    #tomato_station.use_station(player2, Tomato, tomato_img)
 
     use_station(cutting_station1)
     use_station(cutting_station2)

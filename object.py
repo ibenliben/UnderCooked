@@ -153,13 +153,6 @@ class ActionStation(Station):
             player.can_move = True
             print(f"Finished processing: {self.food_type}")
 
-
-#            def trash_food():
-#               if isinstance(self, TrashStation) and player.held_food:
-#                   print(f"{type(player.held_food).__name__} thrown in the trash!")
-#                     player.put_down()  # fjerner maten fra spilleren
-#            trash_food()
-
             def food_slice(food_class, sliced_food_class, food_img):
                 if self.food_type == food_class:
                             new_food = sliced_food_class(player.rect.x, player.rect.y, food_img)
@@ -178,19 +171,37 @@ class ActionStation(Station):
 
             self.food_type = None
 
-            #Evt skrive koden sånn:
-            #if self.food_type == Tomato:
-                #player.pick_up(TomatoSlice(player.rect.x, player.rect.y, tomatoslice_img)) 
-
-                #elif self.food_type == rawPatty:
-                    #player.pick_up(CookedMeat(player.rect.x, player.rect.y, beef_img))
-
-                #player.pick_up(food_type(player.rect.x, player.rect.y, food_img))
-
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
+
+class PlateStation(ActionStation):
+    def __init__(self, x, y, width, height, in_use):
+        super().__init__(x, y, width, height, in_use)
+        self.ingredients = set()
+        self.completed_burger = False
+
+    def place_ingredient(self, player):
+        if player.held_food:
+            if isinstance(player.held_food, (Bread, Tomato, Lettuce, CookedPatty)):
+                self.ingredients.add(type(player.held_food))
+                player.held_food = None     # spilleren legger fra seg maten
+
+            # sjekker om alle ingredienser er der
+            if {Bread, Tomato, Lettuce, CookedPatty}.issubset(self.ingredients):
+                self.completed_burger = True
+                self.ingredients.clear()    # fjerner ingrediensene, blir burger
+
+    def pick_up_burger(self, player):
+        if self.completed_burger and not player.held_food:
+            player.held_food = Burger()
+            self.completed_burger = False   # fjerner burgeren far plate stasjonen
+    
+    def draw(self, screen):
+        super().draw(screen)
+        if self.completed_burger:
+            screen.blit(burger_img, (self.rect.x, self.rect.y))
 
 class TrashStation(ActionStation):
     def __init__(self, x, y, width, height):
@@ -239,39 +250,43 @@ class Food(Object, pg.sprite.Sprite):
         super().update()
 
 #MAT klassene
-class Tomato(Food):  #Hel tomat
+class Tomato(Food):  
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class TomatoSlice(Food):  # kutta tomato
+class TomatoSlice(Food): 
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class Lettuce(Food):  #Helt salathode
+class Lettuce(Food):  
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class LettuceLeaf(Food):  #Salat blad
+class LettuceLeaf(Food): 
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class RawMeat(Food):  #raw kjott
+class RawMeat(Food):  
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class RawPatty(Food):  #raw burgerkjott
+class RawPatty(Food):  
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class CookedPatty(Food):  #stekt burgerkjott
+class CookedPatty(Food):   
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-class Bread(Food):      #burgerbrød
+class Bread(Food):      
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+class Burger(Food):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
 
 # TODO: 
-# - må kunne plukkes opp etter kast
+# - må kunne plukkes opp etter kast/ bare fjerne kasting
 # - må IKKE kunne bruke sliced food i kuttestasjon aka ingenting skjer om du pøver å kutte noe som allerede er kutta
