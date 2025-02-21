@@ -203,6 +203,24 @@ class PlateStation(ActionStation):
         if self.completed_burger:
             screen.blit(burger_img, (self.rect.x, self.rect.y))
 
+class DeliverStation(ActionStation):
+    def __init__(self, x, y, width, height, in_use):
+        super().__init__(x, y, width, height, in_use)
+        self.delivery_time = 0
+
+
+    def deliver_burger(self, player):
+        if isinstance(player.held_food, Burger):
+            player.held_food = None  # spilleren leverer burgeren
+            self.delivery_time = pg.time.get_ticks()  # starter timer
+
+    def update(self):
+        if self.delivery_time and pg.time.get_ticks() - self.delivery_time > 4000:
+            self.delivery_time = 0  # resetter etter 4 sekunder
+
+    def draw(self, screen):
+        super().draw(screen)
+
 class TrashStation(ActionStation):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
