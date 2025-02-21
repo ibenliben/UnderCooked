@@ -28,7 +28,6 @@ class Player(Object):
     def update(self, imagelist , kd, ku, kr, kl, pickup, other_player, wall_list):
         if not self.can_move:
             return
-        speed = 3.5
         speed = 6 #MIDLERTIDIG økt farten til spilleren under beta fasen grunnet raskere debuggings muligheter
         dx, dy = 0, 0  # Midlertidig bevegelse
         keys_pressed = pg.key.get_pressed()
@@ -129,7 +128,6 @@ class ActionStation(Station):
     def __init__(self, x, y, width, height, progress):
         super().__init__(x, y, width, height)
         self.in_use = False
-        self.progress_bar = ProgressBar(4) 
         self.progress_bar = ProgressBar(2)#øker hastigheten til progressbaren under beta fasen
         self.food_type = None   #lagrer typen mat som blir kutta/stekt  
         self.progress = progress
@@ -331,6 +329,7 @@ class Burger(Food):
 class Order:
     def __init__(self, x, y):
         self.x = x
+        self.y = y
         self.width = 120  
         self.height = 120
         self.ingredients = self.generate_order()
