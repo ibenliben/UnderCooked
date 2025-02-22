@@ -13,6 +13,7 @@ import score_text
 orders = []
 spawn_timer = 0
 score = 0
+font = pg.font.Font(None, 36)
 spawn_interval = 300 #hvor ofte det skal komme en ny bestilling, (i frames)
 
 thrown_food = pg.sprite.Group()
@@ -182,6 +183,8 @@ while running:
         order.draw(screen)
         score = order.check_out_of_screen(orders, score) #sjekker om bestillingen har gått av skjermen og fjerner den evt 
 
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255)) 
+    screen.blit(score_text, (600, 10)) 
     # Oppdater skjermen for å vise endringene:
     pg.display.update()
 
