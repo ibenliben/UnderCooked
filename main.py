@@ -81,7 +81,6 @@ def update_station(station):
             station.update(player1 if not player1.can_move else player2)
     station.draw(screen) 
 
-
 running = True
 while running:
     keys_pressed = []
@@ -100,9 +99,6 @@ while running:
     # Tegner bakgrunnsbildet:
     screen.blit(bg_img, (0, 0))
 
-    # TODO: Skriv inn "score"/penger og tid
-
-
     # Flytter og tegner spilleren:
     player1.draw(screen)
     player2.draw(screen)
@@ -113,9 +109,6 @@ while running:
 
     wall_list.draw(screen)
     station_list.draw(screen)
-
-    #plate_station.draw(screen)
-    #deliver_station.draw(screen)
 
     # hvis spiller vil plukke fra mat-stasjon
     food_from_station(tomato_station, Tomato, tomato_img)
@@ -185,7 +178,5 @@ while running:
     screen.blit(score_text, (600, 10)) 
     # Oppdater skjermen for å vise endringene:
     pg.display.update()
-
-
 
 pg.quit()
