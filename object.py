@@ -385,8 +385,7 @@ class Order:
     def update(self):
         print(f"Order y before update: {self.rect.y}") #debuging print, skjønner ikke hvorfor bestillingen stopper fullstenidg når jeg reduserer hastigheten under 0.5
         self.rect.y += self.speed 
-        print(f"Order y after update: {self.rect.y}")   #debugging print, ser at y verdien ikke endrer seg når self.speed <0.5, skjønner ikke hvorfor
-
+        print(f"Order y after update: {self.rect.y}")   #debugging print, ser at y verdien ikke endrer seg når self.speed <0.5, fordi den runder ned hver gang, slik a 10 + 0.4 = 10.4 som den runder ned til 10
 
     def draw(self, screen):
         bg_rect = pg.Rect(self.rect.x, self.rect.y, self.width, self.height)
