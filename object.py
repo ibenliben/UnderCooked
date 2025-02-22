@@ -215,37 +215,26 @@ class ActionStation(Station):
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
 
-#Unødvendig kode nå som alt er samlet i actionstation
-#class CookingStation(ActionStation):
-#    def __init__(self, x, y, width, height, progress):
-#        super().__init__(x, y, width, height, progress)
-#
- #   def use_station(self, player):
-#        if isinstance(player.held_food, RawPatty):  # Kun rått kjøtt kan stekes
-#            self.in_use = True
-#            player.held_food = CookedPatty(player.held_food.rect.x, player.held_food.rect.y, cookedpatty_img)  # bytter ut med stekt kjøtt
-
 class PlateStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
         super().__init__(x, y, width, height, in_use, cut=False)
         self.ingredients = []
-        #self.completed_burger = False
         
     def place_ingredient(self, player):
         if player.held_food:
+            print(f"legger  {player.held_food} til plate")
             if isinstance(player.held_food, (Bread, TomatoSlice, LettuceLeaf, CookedPatty)) and not any(isinstance(i, type(player.held_food)) for i in self.ingredients):
                 self.ingredients.append(player.held_food)
-                player.held_food = None  # spilleren legger fra seg maten
-                
-            # sjekker om alle ingrediensene er der
-            #if {Bread, TomatoSlice, LettuceLeaf, CookedPatty} == {type(i) for i in self.ingredients}:
-              # fjerner ingrediensene, de blir til en burger
+                player.held_food = None  #spilleren legger fra seg maten
+            print(f"nåværende ingredients: {self.ingredients}")
                 
     def pick_up_burger(self, player):
-        player.held_food = Burger(self.rect.x, self.rect.y, burger_img, self.ingredients.copy()) 
-        #self.completed_burger = False
-        self.ingredients.clear()
- 
+        if self.ingredients:  # Ensure there are ingredients on the plate
+            player.held_food = Burger(self.rect.x, self.rect.y, burger_img, self.ingredients.copy())
+            print(f"plukket opp burger med ingredients: {self.ingredients}")
+            self.ingredients.clear()
+        else:
+            print("ikkje noko ingredienser å plukke opp")
 
     def draw(self, screen):
         super().draw(screen)
@@ -262,22 +251,23 @@ class DeliverStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
         super().__init__(x, y, width, height, in_use, cut=False)
         self.delivery_time = 0
-        self.delivered_burger = False  # variabel for å vite om en burger er levert
+        self.delivered_burger = False  #variabel for å vite om en burger er levert
         self.delivered_ingredients = []
 
     def deliver_burger(self, player, orders, score):
         if isinstance(player.held_food, Burger):
-            self.delivered_ingredients = player.held_food.ingredients
+            self.delivered_ingredients = player.held_food.ingredients.copy()
             for order in orders:
-                score = order.check_order(player, orders, score)  
-                if score != order.check_order(player, orders, score):
-                    orders.remove(order) 
-                    break  
+                if order.check_order(self.delivered_ingredients):
+                    score += 10 
+                    orders.remove(order)
+                    break
             self.delivered_burger = True
-            player.held_food = None  
-            self.delivery_time = pg.time.get_ticks()  
+            player.held_food = None
+            self.delivery_time = pg.time.get_ticks()
 
-        return score
+        return score  
+
 
     def update(self):
         if self.delivery_time and pg.time.get_ticks() - self.delivery_time > 3000:
@@ -401,10 +391,14 @@ class Bread(Food):
         super().__init__(x, y, image)
 
 class Burger(Food):
-    def __init__(self, x, y, image, ingredients):
+    def __init__(self, x, y, image, ingredients=None):  #Default til None
         super().__init__(x, y, image)
-        self.ingredients = ingredients or  []
+        self.ingredients = ingredients if ingredients is not None else []
 
+#en funksjon jeg lekte meg med under litt prøving av hvordan å få ingrediensene på burgern til å stemme i lista
+    #def add_ingredient(self, ingredient):
+    #    print(f"legger til {ingredient} på burger")  #Debug
+    #   self.ingredients.append(ingredient)
 
 class Order:
     def __init__(self, x, y):
@@ -414,7 +408,7 @@ class Order:
         self.height = 120
         self.ingredients = self.generate_order()
         self.rect = pg.Rect(x, y, self.width, self.height)
-        self.speed = 0.1
+        self.speed = 0.2
         self.background_color = (250, 250, 250)
         self.image = burger_img  
 
@@ -426,11 +420,9 @@ class Order:
         return base + toppings
 
     def update(self):
-        #print(f"Order y before update: {self.rect.y}") 
         self.y += self.speed  
         self.rect.y = int(self.y) 
-        #print(f"Order y after update: {self.rect.y}")  
-
+      
     def draw(self, screen):
         bg_rect = pg.Rect(self.rect.x, self.rect.y, self.width, self.height)
         pg.draw.rect(screen, self.background_color, bg_rect, border_radius=10)
@@ -441,25 +433,17 @@ class Order:
             text = font.render(ingredient, True, (0, 0, 0))  
             screen.blit(text, (self.rect.x + 50, self.rect.y + 10 + (i * 20)))
 
-    def check_order(self, player, orders, score):
-        if not orders or not player.held_food:
-            return score  
+    def check_order(self, delivered_ingredients):
+        print(f"leverte ingredients: {delivered_ingredients}")
+        print(f"bestillings ingredients: {self.ingredients}") #litt debugging
 
-        delivered_ingredients = player.held_food.ingredients
-        print(f"Delivered ingredients: {delivered_ingredients}")
-
-        for order in orders:
-            print(f"Checking order: {order.ingredients}")
-            if delivered_ingredients == order.ingredients:
-                print(f"Correct order delivered! Score +10. New score: {score + 10}")
-                score += 10
-                orders.remove(order)  # Remove the completed order from the list
-                break
+        if delivered_ingredients == self.ingredients:
+            print("Correct order delivered! Score +10.")
+            return True
         else:
-            print("Welp. Feil bestilling")  # Incorrect order
+            print("Incorrect order.")
+            return False
         
-        return score
-    
     def check_out_of_screen(self, orders, score):
         if score is None:
             score = 0
@@ -470,8 +454,9 @@ class Order:
             return score
         return score
     
-class OrderBurger:
-    def __init__(self, x, y, image, ingredients):
-        self.image = image
-        self.ingredients = ingredients #liste med hva som er på burgeren
-        self.rect = self.image.get_rect(center = (x,y))
+#Egt en unødvendig klasse, ble brukt under testing av kode    
+#class OrderBurger:
+#   def __init__(self, x, y, image, ingredients):
+#        self.image = image
+#        self.ingredients = ingredients #liste med hva som er på burgeren
+#        self.rect = self.image.get_rect(center = (x,y))

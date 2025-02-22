@@ -147,6 +147,7 @@ while running:
     if player2.rect.colliderect(deliver_station.rect) and player2.action:
         score = deliver_station.deliver_burger(player2, orders, score)  
 
+
     plate_station.draw(screen)
     deliver_station.draw(screen)
     deliver_station.update()
