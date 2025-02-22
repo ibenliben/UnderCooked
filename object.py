@@ -18,7 +18,6 @@ class Object:
         self.rect.x += self.dx
         self.rect.y += self.dy
         
-
 class Player(Object):
     def __init__(self, x, y, image):
         super().__init__(x, y, image) 
@@ -53,7 +52,6 @@ class Player(Object):
             dx -= speed
             self.image = imagelist[3]
             self.direction = (-1, 0)
-
 
         # sjekker kollisjon før vi oppdaterer posisjon
         new_rect = self.rect.move(dx, dy)
@@ -250,7 +248,6 @@ class DeliverStation(ActionStation):
             burger_y = self.rect.centery - burger_img.get_height() // 2
             screen.blit(burger_img, (burger_x, burger_y))  # tegner burgeren på midten
 
-
 class TrashStation(ActionStation):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
@@ -416,8 +413,6 @@ class Order:
             print("welp. feil bestilling")
 
         return score
-    
-
 
     def check_out_of_screen(self, orders, score):
         if self.rect.y > 600:  
