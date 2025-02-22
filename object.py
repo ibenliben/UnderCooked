@@ -258,7 +258,7 @@ class DeliverStation(ActionStation):
         if isinstance(player.held_food, Burger):
             self.delivered_ingredients = player.held_food.ingredients.copy()
             for order in orders:
-                if order.check_order(self.delivered_ingredients):
+                if order.check_order(player, self.delivered_ingredients):
                     score += 10 
                     orders.remove(order)
                     break
@@ -433,9 +433,21 @@ class Order:
             text = font.render(ingredient, True, (0, 0, 0))  
             screen.blit(text, (self.rect.x + 50, self.rect.y + 10 + (i * 20)))
 
-    def check_order(self, delivered_ingredients):
+    def check_order(self, player,  delivered_ingredients):
+        name_mapping = {
+            "CookedPatty": "Patty",
+            "RawPatty": "Patty",
+            "TomatoSlice": "Tomato",
+            "LettuceLeaf": "Lettuce"
+        }
+    
+        delivered_ingredients = [
+            name_mapping.get(ingredient.__class__.__name__, ingredient.__class__.__name__)  
+            for ingredient in player.held_food.ingredients
+        ]
         print(f"leverte ingredients: {delivered_ingredients}")
         print(f"bestillings ingredients: {self.ingredients}") #litt debugging
+        
 
         if delivered_ingredients == self.ingredients:
             print("Correct order delivered! Score +10.")
