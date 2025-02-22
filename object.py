@@ -250,6 +250,7 @@ class DeliverStation(ActionStation):
             burger_y = self.rect.centery - burger_img.get_height() // 2
             screen.blit(burger_img, (burger_x, burger_y))  # tegner burgeren på midten
 
+
 class TrashStation(ActionStation):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
@@ -366,26 +367,27 @@ class Burger(Food):
 class Order:
     def __init__(self, x, y):
         self.x = x
-        self.y = y
+        self.y = float(y)
         self.width = 120  
         self.height = 120
         self.ingredients = self.generate_order()
-        self.rect = pg.Rect(x, y, self.width, self.height) 
-        self.speed = 0.5
+        self.rect = pg.Rect(x, y, self.width, self.height)
+        self.speed = 0.1
         self.background_color = (200, 200, 200)
         self.image = burger_img  
 
     def generate_order(self):
         base = ["Bread", "Patty"] 
-        optional = ["Lettuce", "Tomato", "Cheese"]
+        optional = ["Lettuce", "Tomato"]
         num_toppings = random.randint(1, len(optional))
         toppings = random.sample(optional, num_toppings) 
         return base + toppings
 
     def update(self):
-        print(f"Order y before update: {self.rect.y}") #debuging print, skjønner ikke hvorfor bestillingen stopper fullstenidg når jeg reduserer hastigheten under 0.5
-        self.rect.y += self.speed 
-        print(f"Order y after update: {self.rect.y}")   #debugging print, ser at y verdien ikke endrer seg når self.speed <0.5, fordi den runder ned hver gang, slik a 10 + 0.4 = 10.4 som den runder ned til 10
+        print(f"Order y before update: {self.rect.y}") 
+        self.y += self.speed  
+        self.rect.y = int(self.y) 
+        print(f"Order y after update: {self.rect.y}")  
 
     def draw(self, screen):
         bg_rect = pg.Rect(self.rect.x, self.rect.y, self.width, self.height)
@@ -404,15 +406,19 @@ class Order:
         delivered_ingredients = player.held_food.ingredients
         current_order = orders[0].ingredients
 
-        if delivered_ingredients == current_order:
-            print(f"Correct order delivered! Score +10. New score: {score + 10}")
-            score += 10
-            orders.pop(0)  #fjerner den ferdige bestillingen fra listen
+        for order in orders:
+            if delivered_ingredients == order.ingredients:
+                print(f"Correct order delivered! Score +10. New score: {score + 10}")
+                score += 10
+                orders.remove(order)  #fjerner den ferdige bestillingen fra listen
+                break
         else:
             print("welp. feil bestilling")
 
         return score
     
+
+
     def check_out_of_screen(self, orders, score):
         if self.rect.y > 600:  
             orders.remove(self)

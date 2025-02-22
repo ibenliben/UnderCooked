@@ -14,7 +14,7 @@ orders = []
 spawn_timer = 0
 score = 0
 font = pg.font.Font(None, 36)
-spawn_interval = 300 #hvor ofte det skal komme en ny bestilling, (i frames)
+spawn_interval = 3000 #hvor ofte det skal komme en ny bestilling, (i frames)
 
 thrown_food = pg.sprite.Group()
 meat = pg.sprite.Group()
@@ -187,6 +187,7 @@ while running:
     screen.blit(score_text, (600, 10)) 
     # Oppdater skjermen for å vise endringene:
     pg.display.update()
+
 
 
 pg.quit()
