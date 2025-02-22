@@ -291,7 +291,10 @@ class Food(Object, pg.sprite.Sprite):
             self.rect.y = self.y_start  
 
         if self.cooldown_timer == 0:
+            self.cooldown_timer = pg.time.get_ticks()
         elif pg.time.get_ticks() - self.cooldown_timer >= self.cooldown_duration:
+            self.kill()  
+        
         super().update()
 
 class ThrownFood(pg.sprite.Sprite):
