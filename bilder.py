@@ -22,8 +22,6 @@ p1_u = pg.image.load("assets/player/p1front.png").convert_alpha()
 p2_u = pg.image.load("assets/player/p2left.png").convert_alpha()
 p1_r = pg.image.load("assets/player/p1right.png").convert_alpha()
 p2_l = pg.image.load("assets/player/p2left.png").convert_alpha()
-p1_stand_l = pg.image.load("assets/player/p1standleft.png").convert_alpha()
-p2_stand_r = pg.image.load("assets/player/p2standright.png").convert_alpha()
 
 PLAYER_HEIGHT = 40
 
