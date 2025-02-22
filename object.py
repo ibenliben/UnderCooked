@@ -175,6 +175,7 @@ class ActionStation(Station):
 
 
     def use_station(self, player):
+        print(f"Player {player} is trying to use the station.")
         if player.held_food and player.action and not self.in_use:
             self.process_food(player)
 
@@ -434,26 +435,33 @@ class Order:
             screen.blit(text, (self.rect.x + 50, self.rect.y + 10 + (i * 20)))
 
     def check_order(self, player,  delivered_ingredients):
+        #Lage en ordbok for å konvertere innholdet i listen til delivered ingredients
         name_mapping = {
             "CookedPatty": "Patty",
             "RawPatty": "Patty",
             "TomatoSlice": "Tomato",
             "LettuceLeaf": "Lettuce"
         }
-    
+        correct_order = self.ingredients  
+
         delivered_ingredients = [
             name_mapping.get(ingredient.__class__.__name__, ingredient.__class__.__name__)  
             for ingredient in player.held_food.ingredients
         ]
+        #Stokke om på ingrediensene basert på hvilken rekkefølge de er i bestillingen
+        delivered_ingredients = sorted(
+            delivered_ingredients,
+            key=lambda x: correct_order.index(x) if x in correct_order else len(correct_order)
+        )
         print(f"leverte ingredients: {delivered_ingredients}")
         print(f"bestillings ingredients: {self.ingredients}") #litt debugging
-        
+            
 
         if delivered_ingredients == self.ingredients:
-            print("Correct order delivered! Score +10.")
+            print("RIKTIG bestilling! Score +10.")
             return True
         else:
-            print("Incorrect order.")
+            print("welp, feil bestilling")
             return False
         
     def check_out_of_screen(self, orders, score):
@@ -462,13 +470,7 @@ class Order:
         if self.rect.y > 600:  
             orders.remove(self)
             score -= 30
-            print(f"the time ran out,  -30 points New score: {score}")
+            print(f"tiden gikk ut på en bestilling,  -30 points New score: {score}")
             return score
         return score
     
-#Egt en unødvendig klasse, ble brukt under testing av kode    
-#class OrderBurger:
-#   def __init__(self, x, y, image, ingredients):
-#        self.image = image
-#        self.ingredients = ingredients #liste med hva som er på burgeren
-#        self.rect = self.image.get_rect(center = (x,y))
