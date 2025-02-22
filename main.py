@@ -1,6 +1,6 @@
 import pygame as pg
 from constants import *
-from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_SPACE, K_RETURN, K_RSHIFT, K_LSHIFT)
+from pygame.locals import (K_w, K_s, K_d, K_a, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_SPACE, K_RETURN, K_RSHIFT, K_LSHIFT, K_LCTRL, K_RCTRL)
 
 pg.init()
 clock = pg.time.Clock()
@@ -103,8 +103,8 @@ while running:
     player1.draw(screen)
     player2.draw(screen)
 
-    player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, player2, wall_list)
-    player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, player1, wall_list)
+    player1.update(images1, K_w, K_s, K_d, K_a, K_SPACE, K_LCTRL, player2, wall_list)
+    player2.update(images2 , K_UP, K_DOWN, K_RIGHT, K_LEFT, K_RETURN, K_RCTRL, player1, wall_list)
 
 
     wall_list.draw(screen)
@@ -135,10 +135,10 @@ while running:
     if player2.rect.colliderect(plate_station.rect) and player2.action:
         plate_station.place_ingredient(player2)
 
-    if player1.rect.colliderect(plate_station.rect) and player1.action:
+    if player1.rect.colliderect(plate_station.rect) and player1.plateAction:
         plate_station.pick_up_burger(player1)
 
-    if player2.rect.colliderect(plate_station.rect) and player2.action:
+    if player2.rect.colliderect(plate_station.rect) and player2.plateAction:
         plate_station.pick_up_burger(player2)
 
     if player1.rect.colliderect(deliver_station.rect) and player1.action:
@@ -146,6 +146,8 @@ while running:
 
     if player2.rect.colliderect(deliver_station.rect) and player2.action:
         score = deliver_station.deliver_burger(player2, orders, score)  
+
+    
 
     plate_station.draw(screen)
     deliver_station.draw(screen)

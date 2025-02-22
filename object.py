@@ -25,8 +25,9 @@ class Player(Object):
         self.can_move = True  
         self.rect = self.image.get_rect(center=(x, y))
         self.direction = (0, 0)
+        self.plateAction = False
 
-    def update(self, imagelist , kd, ku, kr, kl, pickup, other_player, wall_list):
+    def update(self, imagelist , kd, ku, kr, kl, pickup, ctrl, other_player, wall_list):
         if not self.can_move:
             return
         speed = 6 #MIDLERTIDIG økt farten til spilleren under beta fasen grunnet raskere debuggings muligheter
@@ -64,6 +65,12 @@ class Player(Object):
         else: 
             self.action = False
             #print("action false")
+        
+        if keys_pressed[ctrl]:
+            self.plateAction = True
+            print("plateAction = True")
+        else:
+            self.plateAction = False
 
         self.rect.topleft = (self.rect.x, self.rect.y)
 
@@ -195,7 +202,7 @@ class PlateStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
         super().__init__(x, y, width, height, in_use)
         self.ingredients = []
-        self.completed_burger = False
+        #self.completed_burger = False
         
     def place_ingredient(self, player):
         if player.held_food:
@@ -204,16 +211,15 @@ class PlateStation(ActionStation):
                 player.held_food = None  # spilleren legger fra seg maten
                 
             # sjekker om alle ingrediensene er der
-            if {Bread, TomatoSlice, LettuceLeaf, CookedPatty} == {type(i) for i in self.ingredients}:
-                self.completed_burger = True
-                self.ingredients.clear()  # fjerner ingrediensene, de blir til en burger
+            #if {Bread, TomatoSlice, LettuceLeaf, CookedPatty} == {type(i) for i in self.ingredients}:
+              # fjerner ingrediensene, de blir til en burger
                 
     def pick_up_burger(self, player):
-        if self.completed_burger and not player.held_food:
-            player.held_food = Burger(self.rect.x, self.rect.y, burger_img, self.ingredients.copy()) 
-            self.completed_burger = False  # fjerner burgeren fra tallerkenen
-            self.ingredients.clear() 
-    
+        player.held_food = Burger(self.rect.x, self.rect.y, burger_img, self.ingredients.copy()) 
+        #self.completed_burger = False
+        self.ingredients.clear()
+ 
+
     def draw(self, screen):
         super().draw(screen)
         x_offset = -len(self.ingredients) * 10 // 2  # startpunkt for å sentrere ingrediensene
@@ -222,8 +228,8 @@ class PlateStation(ActionStation):
             ingredient_y = self.rect.centery - ingredient.image.get_height() // 2
             screen.blit(ingredient.image, (ingredient_x, ingredient_y))
             x_offset += 20  # øker mellomrommet mellom ingredienser
-        if self.completed_burger:
-            screen.blit(burger_img, (self.rect.x, self.rect.y))
+        #if self.completed_burger:
+            #screen.blit(burger_img, (self.rect.x, self.rect.y))
 
 class DeliverStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
