@@ -212,8 +212,9 @@ class PlateStation(ActionStation):
                 
     def pick_up_burger(self, player):
         if self.completed_burger and not player.held_food:
-            player.held_food = Burger(self.rect.x, self.rect.y, burger_img,)
+            player.held_food = Burger(self.rect.x, self.rect.y, burger_img, self.ingredients.copy()) 
             self.completed_burger = False  # fjerner burgeren fra tallerkenen
+            self.ingredients.clear() 
     
     def draw(self, screen):
         super().draw(screen)
@@ -231,12 +232,21 @@ class DeliverStation(ActionStation):
         super().__init__(x, y, width, height, in_use)
         self.delivery_time = 0
         self.delivered_burger = False  # variabel for å vite om en burger er levert
+        self.delivered_ingredients = []
 
-    def deliver_burger(self, player):
+    def deliver_burger(self, player, orders, score):
         if isinstance(player.held_food, Burger):
-            player.held_food = None  # spilleren leverer burgeren
-            self.delivery_time = pg.time.get_ticks()  # starter timer
-            self.delivered_burger = True  # burger er levert
+            self.delivered_ingredients = player.held_food.ingredients
+            for order in orders:
+                score = order.check_order(player, orders, score)  
+                if score != order.check_order(player, orders, score):
+                    orders.remove(order) 
+                    break  
+            self.delivered_burger = True
+            player.held_food = None  
+            self.delivery_time = pg.time.get_ticks()  
+
+        return score
 
     def update(self):
         if self.delivery_time and pg.time.get_ticks() - self.delivery_time > 3000:
@@ -361,8 +371,10 @@ class Bread(Food):
         super().__init__(x, y, image)
 
 class Burger(Food):
-    def __init__(self, x, y, image):
+    def __init__(self, x, y, image, ingredients):
         super().__init__(x, y, image)
+        self.ingredients = ingredients or  []
+
 
 class Order:
     def __init__(self, x, y):
@@ -373,7 +385,7 @@ class Order:
         self.ingredients = self.generate_order()
         self.rect = pg.Rect(x, y, self.width, self.height)
         self.speed = 0.1
-        self.background_color = (200, 200, 200)
+        self.background_color = (250, 250, 250)
         self.image = burger_img  
 
     def generate_order(self):
@@ -384,10 +396,10 @@ class Order:
         return base + toppings
 
     def update(self):
-        print(f"Order y before update: {self.rect.y}") 
+        #print(f"Order y before update: {self.rect.y}") 
         self.y += self.speed  
         self.rect.y = int(self.y) 
-        print(f"Order y after update: {self.rect.y}")  
+        #print(f"Order y after update: {self.rect.y}")  
 
     def draw(self, screen):
         bg_rect = pg.Rect(self.rect.x, self.rect.y, self.width, self.height)
@@ -404,22 +416,23 @@ class Order:
             return score  
 
         delivered_ingredients = player.held_food.ingredients
-        current_order = orders[0].ingredients
+        print(f"Delivered ingredients: {delivered_ingredients}")
 
         for order in orders:
+            print(f"Checking order: {order.ingredients}")
             if delivered_ingredients == order.ingredients:
                 print(f"Correct order delivered! Score +10. New score: {score + 10}")
                 score += 10
-                orders.remove(order)  #fjerner den ferdige bestillingen fra listen
+                orders.remove(order)  # Remove the completed order from the list
                 break
         else:
-            print("welp. feil bestilling")
-
+            print("Welp. Feil bestilling")  # Incorrect order
+        
         return score
     
-
-
     def check_out_of_screen(self, orders, score):
+        if score is None:
+            score = 0
         if self.rect.y > 600:  
             orders.remove(self)
             score -= 30

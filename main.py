@@ -14,7 +14,7 @@ orders = []
 spawn_timer = 0
 score = 0
 font = pg.font.Font(None, 36)
-spawn_interval = 3000 #hvor ofte det skal komme en ny bestilling, (i frames)
+spawn_interval = 1000 #hvor ofte det skal komme en ny bestilling, (i frames)
 
 thrown_food = pg.sprite.Group()
 meat = pg.sprite.Group()
@@ -149,16 +149,14 @@ while running:
         plate_station.pick_up_burger(player2)
 
     if player1.rect.colliderect(deliver_station.rect) and player1.action:
-        deliver_station.deliver_burger(player1)
+        score = deliver_station.deliver_burger(player1, orders, score)
 
     if player2.rect.colliderect(deliver_station.rect) and player2.action:
-        deliver_station.deliver_burger(player2)
+        score = deliver_station.deliver_burger(player2, orders, score)  
 
     plate_station.draw(screen)
     deliver_station.draw(screen)
     deliver_station.update()
-
-
 
     player1.throw(keys_pressed, K_LSHIFT, thrown_food)
     player2.throw(keys_pressed, K_RSHIFT, thrown_food)
