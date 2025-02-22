@@ -212,7 +212,7 @@ class PlateStation(ActionStation):
                 
     def pick_up_burger(self, player):
         if self.completed_burger and not player.held_food:
-            player.held_food = Burger(self.rect.x, self.rect.y, burger_img)
+            player.held_food = Burger(self.rect.x, self.rect.y, burger_img,)
             self.completed_burger = False  # fjerner burgeren fra tallerkenen
     
     def draw(self, screen):
@@ -422,7 +422,7 @@ class Order:
             return score
         return score
     
-class Burger:
+class OrderBurger:
     def __init__(self, x, y, image, ingredients):
         self.image = image
         self.ingredients = ingredients #liste med hva som er på burgeren
