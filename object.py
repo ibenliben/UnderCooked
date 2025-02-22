@@ -137,27 +137,50 @@ class Station(pg.sprite.Sprite):
         self.rect.y = y
 
 class ActionStation(Station):
-    def __init__(self, x, y, width, height, progress):
+    def __init__(self, x, y, width, height, progress, cut):
         super().__init__(x, y, width, height)
         self.in_use = False
         self.progress_bar = ProgressBar(2)#øker hastigheten til progressbaren under beta fasen
         self.food_type = None   #lagrer typen mat som blir kutta/stekt  
         self.progress = progress
+        self.cut = cut
+
+    
+    def process_food(self, player):
+        if not player.held_food:
+            return
+
+        food_type = type(player.held_food)
+        print(f"Started processing: {food_type}")  # Debug-melding
+
+        if self.cut:  #Kuttestasjon
+            if isinstance(player.held_food, (Tomato, Lettuce, RawMeat)):
+                print(f"{food_type} is being sliced")
+            else:
+                print(f"{food_type} cannot be sliced")
+                return
+        else:  # Kokestasjon
+            if isinstance(player.held_food, RawPatty):
+                print(f"{food_type} is being cooked")
+            else:
+                print(f"{food_type} cannot be cooked")
+                return
+
+        #Start prosessen hvis mattypen er gyldig
+        self.in_use = True
+        self.food_type = food_type
+        self.progress_bar.start()
+        player.can_move = False
+        player.put_down()
+
 
     def use_station(self, player):
-        if player.held_food and player.action and not self.in_use:  
-            print(f"Started processing: {type(player.held_food)}")  # Debug-melding
-            self.in_use = True
-            self.food_type = type(player.held_food)
+        if player.held_food and player.action and not self.in_use:
+            self.process_food(player)
 
-            if self.progress:  # Only run the progress bar if progress is enabled
-                self.progress_bar.start()
-                player.can_move = False
-            
-            player.put_down()  
 
     def update(self, player):
-        if not self.in_use:  # Legger til en sjekk
+        if not self.in_use:
             return
 
         self.progress_bar.update()
@@ -166,21 +189,24 @@ class ActionStation(Station):
             player.can_move = True
             print(f"Finished processing: {self.food_type}")
 
-            def food_slice(food_class, sliced_food_class, food_img):
-                if self.food_type == food_class:
-                            new_food = sliced_food_class(player.rect.x, player.rect.y, food_img)
-                            print(f"Created a {sliced_food_class}!")
-                            player.pick_up(new_food)                            
-            food_slice(Tomato, TomatoSlice, tomatoslice_img)
-            food_slice(Lettuce, LettuceLeaf, leaf_img)
-            food_slice(RawMeat, RawPatty, rawpatty_img)
+            #Opprett ny mat basert på prosessen
+            if self.cut:
+                sliced_food_map = {
+                    Tomato: (TomatoSlice, tomatoslice_img),
+                    Lettuce: (LettuceLeaf, leaf_img),
+                    RawMeat: (RawPatty, rawpatty_img),
+                }
+                if self.food_type in sliced_food_map:
+                    sliced_class, image = sliced_food_map[self.food_type]
+                    new_food = sliced_class(player.rect.x, player.rect.y, image)
+                    print(f"Created a {sliced_class}!")
+                    player.pick_up(new_food)
 
-            def cook_meat():
-                if isinstance(player.held_food, RawPatty):  # kun rå patty kan stekes
+            else:  #Kokestasjon
+                if self.food_type == RawPatty:
                     cookedpatty = CookedPatty(player.rect.x, player.rect.y, cookedpatty_img)
                     print("Created a Cooked Patty!")
                     player.pick_up(cookedpatty)
-            cook_meat()
 
             self.food_type = None
 
@@ -189,18 +215,19 @@ class ActionStation(Station):
         if self.in_use:
             self.progress_bar.draw(screen, self.rect.x, self.rect.y - 20, 50, 10)
 
-class CookingStation(ActionStation):
-    def __init__(self, x, y, width, height, progress):
-        super().__init__(x, y, width, height, progress)
+#Unødvendig kode nå som alt er samlet i actionstation
+#class CookingStation(ActionStation):
+#    def __init__(self, x, y, width, height, progress):
+#        super().__init__(x, y, width, height, progress)
+#
+ #   def use_station(self, player):
+#        if isinstance(player.held_food, RawPatty):  # Kun rått kjøtt kan stekes
+#            self.in_use = True
+#            player.held_food = CookedPatty(player.held_food.rect.x, player.held_food.rect.y, cookedpatty_img)  # bytter ut med stekt kjøtt
 
-    def use_station(self, player):
-        if isinstance(player.held_food, RawPatty):  # Kun rått kjøtt kan stekes
-            self.in_use = True
-            player.held_food = CookedPatty(player.held_food.rect.x, player.held_food.rect.y, cookedpatty_img)  # bytter ut med stekt kjøtt
-    
 class PlateStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
-        super().__init__(x, y, width, height, in_use)
+        super().__init__(x, y, width, height, in_use, cut=False)
         self.ingredients = []
         #self.completed_burger = False
         
@@ -233,7 +260,7 @@ class PlateStation(ActionStation):
 
 class DeliverStation(ActionStation):
     def __init__(self, x, y, width, height, in_use):
-        super().__init__(x, y, width, height, in_use)
+        super().__init__(x, y, width, height, in_use, cut=False)
         self.delivery_time = 0
         self.delivered_burger = False  # variabel for å vite om en burger er levert
         self.delivered_ingredients = []
