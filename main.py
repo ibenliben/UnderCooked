@@ -83,7 +83,9 @@ def update_station(station):
 running = True
 while running:
     keys_pressed = []
+    #keys_pressed = pg.key.get_pressed()       -> for å holde taster inne isteden for å trykke 
     # Sjekker om brukeren avslutter vinduet:
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
@@ -168,7 +170,6 @@ while running:
     for food in thrown_food:
         food.update()
         food.draw(screen)
-
 
     spawn_timer += 1
     if spawn_timer >= spawn_interval:

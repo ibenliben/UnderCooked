@@ -24,6 +24,8 @@ class Player(Object):
         super().__init__(x, y, image) 
         self.held_food = None   # spilleren holder ingen mat ved start
         self.can_move = True  
+        self.rect = self.image.get_rect(center=(x, y))
+        self.direction = (0, 0)
 
     def update(self, imagelist , kd, ku, kr, kl, pickup, other_player, wall_list):
         if not self.can_move:
@@ -35,18 +37,23 @@ class Player(Object):
         if keys_pressed[ku]:
             dy += speed
             self.image = imagelist[0]
+            self.direction = (0, -1)
 
         if keys_pressed[kd]:
             dy -= speed
             self.image = imagelist[1]
+            self.direction = (0, 1)
 
         if keys_pressed[kr]:
             dx += speed
             self.image = imagelist[2]
+            self.direction = (1, 0)
 
         if keys_pressed[kl]:
             dx -= speed
             self.image = imagelist[3]
+            self.direction = (-1, 0)
+
 
         # sjekker kollisjon før vi oppdaterer posisjon
         new_rect = self.rect.move(dx, dy)
@@ -72,17 +79,17 @@ class Player(Object):
             if new_rect.colliderect(wall):
                 return True
         return False
-
-    def throw(self, keys_pressed, k_throw, thrown_food):
-        # kan bare kaste mat hvis spilleren har mat
-        if k_throw in keys_pressed and self.held_food:      
-            thrown_food.add(self.held_food)
-            self.held_food = None       # spilleren mister maten
-
     
+    def throw(self, keys_pressed, throw_key, thrown_food_group):
+        if throw_key in keys_pressed and self.held_food is not None:
+            # Throw the food based on current direction
+            food = ThrownFood(self.rect.centerx, self.rect.centery, self.held_food.image, self.direction)
+            thrown_food_group.add(food)  # Add thrown food to the group
+            self.held_food = None
+
     def pick_up(self, food):
         if self.held_food is None:
-            print(f"Picking up: {type(food)}")  # Debug-melding
+            print(f"Picking up: {type(food)}")  #Debug-melding
             self.held_food = food
 
     def put_down(self):
@@ -263,31 +270,58 @@ class Food(Object, pg.sprite.Sprite):
     def __init__(self, x, y, image):
         pg.sprite.Sprite.__init__(self)
         super().__init__(x, y, image)
-        self.dx = 3
-        self.dy = -2
+        self.dx = 0
+        self.dy = 0
+        self.gravity = 0.2  
+        self.friction = 0.95  
         self.y_start = self.rect.y
         self.cooldown_timer = 0
-        self.cooldown_duration = 9000 
-        
+        self.cooldown_duration = 9000  
+
     def update(self):
-        self.dy += 0.1
-        # oppdaterer posisjonen basert på hastigheten
+        self.dy += self.gravity  
+        self.dx *= self.friction  
+
         self.rect.x += self.dx
         self.rect.y += self.dy
 
-        # stopper når den treffer bakken
-        if self.dy > 0 and abs(self.rect.y - self.y_start) < 0.1:
-            self.dx = 0
+        if self.rect.y >= self.y_start:  
             self.dy = 0
-            self.rect.y = self.y_start
+            self.dx = 0
+            self.rect.y = self.y_start  
 
-
-        #lager en cooldown timer
         if self.cooldown_timer == 0:
-                self.cooldown_timer = pg.time.get_ticks()
         elif pg.time.get_ticks() - self.cooldown_timer >= self.cooldown_duration:
-                self.kill() #fjerner tomaten fra alle sprites
         super().update()
+
+class ThrownFood(pg.sprite.Sprite):
+    def __init__(self, x, y, image, direction):
+        super().__init__() 
+        self.image = image 
+        self.rect = self.image.get_rect(center=(x, y)) 
+        self.vx = direction[0] * 6 
+        self.vy = direction[1] * 5  -7
+        self.gravity = 0.3  
+        self.initial_y = y 
+        self.time_on_ground = None 
+
+    def update(self):
+        self.vy += self.gravity 
+        self.rect.x += self.vx  
+        self.rect.y += self.vy  
+        if self.rect.y >= self.initial_y:
+            self.rect.y = self.initial_y  
+            self.vy = 0  
+            self.vx = 0 
+
+        if self.time_on_ground is None:
+            self.time_on_ground = pg.time.get_ticks()
+
+        if self.time_on_ground is not None and pg.time.get_ticks() - self.time_on_ground >= 4000:
+            self.kill()
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect) 
 
 #MAT klassene
 class Tomato(Food):  
