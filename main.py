@@ -39,6 +39,7 @@ trash_station = ActionStation(330, 70, 50, 70, False, False)
 
 stations = [tomato_station, bread_station, meat_station, plate_station, cutting_station1, cutting_station2, 
             cooking_station1, cooking_station2, trash_station, lettuce_station, deliver_station]
+            
 for station in stations:
     station_list.add(station)
 

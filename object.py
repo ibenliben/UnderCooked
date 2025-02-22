@@ -202,7 +202,7 @@ class ActionStation(Station):
                     print(f"Created a {sliced_class}!")
                     player.pick_up(new_food)
 
-            else:  #Kokestasjon
+            else:  #stekeestasjon
                 if self.food_type == RawPatty:
                     cookedpatty = CookedPatty(player.rect.x, player.rect.y, cookedpatty_img)
                     print("Created a Cooked Patty!")
