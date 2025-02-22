@@ -176,9 +176,15 @@ while running:
         order.draw(screen)
         score = order.check_out_of_screen(orders, score) #sjekker om bestillingen har gått av skjermen og fjerner den evt 
 
-    score_text = font.render(f"Score: {score}", True, (255, 255, 255)) 
-    screen.blit(score_text, (600, 10)) 
-    # Oppdater skjermen for å vise endringene:
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    outline_text = font.render(f"Score: {score}", True, (0, 0, 0))
+    for dx in [-2, 0, 2]:  
+        for dy in [-2, 0, 2]:  
+            if dx != 0 or dy != 0:  
+                screen.blit(outline_text, (600 + dx, 10 + dy))
+    screen.blit(score_text, (600, 10))
+   
+
     pg.display.update()
 
 pg.quit()
