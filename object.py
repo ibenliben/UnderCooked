@@ -371,35 +371,31 @@ class Order:
         self.height = 120
         self.ingredients = self.generate_order()
         self.rect = pg.Rect(x, y, self.width, self.height) 
-        self.speed = 0.5 
+        self.speed = 0.5
         self.background_color = (200, 200, 200)
-        self.image = burger_img  #
+        self.image = burger_img  
 
     def generate_order(self):
-
-        base = ["Bread", "Patty"]  # Every order has bread and meat
+        base = ["Bread", "Patty"] 
         optional = ["Lettuce", "Tomato", "Cheese"]
         num_toppings = random.randint(1, len(optional))
-        toppings = random.sample(optional, num_toppings)  # Randomly select toppings
+        toppings = random.sample(optional, num_toppings) 
         return base + toppings
 
     def update(self):
-        """Move the order downward."""
-        self.rect.y += self.speed
+        print(f"Order y before update: {self.rect.y}") #debuging print, skjønner ikke hvorfor bestillingen stopper fullstenidg når jeg reduserer hastigheten under 0.5
+        self.rect.y += self.speed 
+        print(f"Order y after update: {self.rect.y}")   #debugging print, ser at y verdien ikke endrer seg når self.speed <0.5, skjønner ikke hvorfor
+
 
     def draw(self, screen):
-        """Draw the order background, image, and ingredient list."""
-        # Draw background
         bg_rect = pg.Rect(self.rect.x, self.rect.y, self.width, self.height)
         pg.draw.rect(screen, self.background_color, bg_rect, border_radius=10)
+        screen.blit(self.image, (self.rect.x + 10, self.rect.y + 10))  
 
-        # Draw order image
-        screen.blit(self.image, (self.rect.x + 10, self.rect.y + 10))  # Offset for padding
-
-        # Draw ingredients as text
         font = pg.font.Font(None, 24)
         for i, ingredient in enumerate(self.ingredients):
-            text = font.render(ingredient, True, (0, 0, 0))  # Black text
+            text = font.render(ingredient, True, (0, 0, 0))  
             screen.blit(text, (self.rect.x + 50, self.rect.y + 10 + (i * 20)))
 
     def check_order(self, player, orders, score):
@@ -412,11 +408,20 @@ class Order:
         if delivered_ingredients == current_order:
             print(f"Correct order delivered! Score +10. New score: {score + 10}")
             score += 10
-            orders.pop(0)  # fjerner den ferdige bestillingen fra listen
+            orders.pop(0)  #fjerner den ferdige bestillingen fra listen
         else:
             print("welp. feil bestilling")
 
         return score
+    
+    def check_out_of_screen(self, orders, score):
+        if self.rect.y > 600:  
+            orders.remove(self)
+            score -= 30
+            print(f"the time ran out,  -30 points New score: {score}")
+            return score
+        return score
+    
 class Burger:
     def __init__(self, x, y, image, ingredients):
         self.image = image
