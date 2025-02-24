@@ -87,9 +87,8 @@ class Player(Object):
     
     def throw(self, keys_pressed, throw_key, thrown_food_group):
         if throw_key in keys_pressed and self.held_food is not None:
-            # Throw the food based on current direction
             food = ThrownFood(self.rect.centerx, self.rect.centery, self.held_food.image, self.direction)
-            thrown_food_group.add(food)  # Add thrown food to the group
+            thrown_food_group.add(food) 
             self.held_food = None
 
     def pick_up(self, food):
@@ -108,10 +107,8 @@ class ProgressBar:
 
     def start(self):
         self.start_time = pg.time.get_ticks()
-        #print("ProgressBar startet :", self.start_time) -> brukt under debug
 
     def update(self):
-        #print("progressjon:", self.progress) -> brukt for debug
         if self.start_time is not None:
             elapsed_time = (pg.time.get_ticks() - self.start_time) / 1000  
             self.progress = min(elapsed_time / self.duration, 1) 
@@ -121,8 +118,8 @@ class ProgressBar:
             return
         border_rect = pg.Rect(x - 2, y - 2, width + 4, height + 4)  # Litt større enn progress bar
         pg.draw.rect(screen, (255, 255, 255), border_rect, 2)  
-        pg.draw.rect(screen, (255, 0, 0), (x, y, width, height)) # Rød bakgrunn
-        pg.draw.rect(screen, (0, 255, 0), (x, y, width * self.progress, height)) # grønnt progress etterhvert
+        pg.draw.rect(screen, (255, 0, 0), (x, y, width, height)) 
+        pg.draw.rect(screen, (0, 255, 0), (x, y, width * self.progress, height)) #
 
     def is_complete(self):
         return self.progress >= 1
@@ -140,8 +137,8 @@ class ActionStation(Station):
     def __init__(self, x, y, width, height, progress, cut):
         super().__init__(x, y, width, height)
         self.in_use = False
-        self.progress_bar = ProgressBar(2)#øker hastigheten til progressbaren under beta fasen
-        self.food_type = None   #lagrer typen mat som blir kutta/stekt  
+        self.progress_bar = ProgressBar(2)
+        self.food_type = None    
         self.progress = progress
         self.cut = cut
 
@@ -151,7 +148,7 @@ class ActionStation(Station):
             return
 
         food_type = type(player.held_food)
-        print(f"Started processing: {food_type}")  # Debug-melding
+        print(f"Started processing: {food_type}") #Debugz
 
         if self.cut:  #Kuttestasjon
             if isinstance(player.held_food, (Tomato, Lettuce, RawMeat)):
@@ -166,7 +163,6 @@ class ActionStation(Station):
                 print(f"{food_type} cannot be cooked")
                 return
 
-        #Start prosessen hvis mattypen er gyldig
         self.in_use = True
         self.food_type = food_type
         self.progress_bar.start()
@@ -203,7 +199,7 @@ class ActionStation(Station):
                     print(f"Created a {sliced_class}!")
                     player.pick_up(new_food)
 
-            else:  #stekeestasjon
+            else:  
                 if self.food_type == RawPatty:
                     cookedpatty = CookedPatty(player.rect.x, player.rect.y, cookedpatty_img)
                     print("Created a Cooked Patty!")
@@ -416,7 +412,7 @@ class Order:
     def generate_order(self):
         base = ["Bread", "Patty"] 
         optional = ["Lettuce", "Tomato"]
-        num_toppings = random.randint(1, len(optional))
+        num_toppings = random.randint(0, len(optional))
         toppings = random.sample(optional, num_toppings) 
         return base + toppings
 
